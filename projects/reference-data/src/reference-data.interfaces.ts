@@ -426,6 +426,13 @@ export interface SelectedJudiciaryOptions {
   withSpecialism?: boolean;
 }
 
+export enum Specialism {
+  MURDER = 'MURDER',
+  ATTEMPTEDMURDER = 'ATTEMPTED_MURDER',
+  SEXUALOFFENCE = 'SEXUAL_OFFENCE',
+  TERRORISM = 'TERRORISM'
+}
+
 export interface JudicialMember {
   id: string;
   cpUserId?: string;
@@ -444,6 +451,7 @@ export interface JudicialMember {
   validFrom?: string;
   validTo?: string;
   ljaShortName?: string;
+  specialisms?: Specialism[];
 }
 
 export interface SpecialRequirement {

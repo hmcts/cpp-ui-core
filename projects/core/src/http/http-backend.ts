@@ -1,5 +1,5 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GENERATE_UNIQUE_KEY, GenerateUniqueKeyFn } from './util';
 
@@ -21,9 +21,9 @@ export interface GetRequestOptions {
 
 export interface PostRequestOptions {
   headers?: HttpHeaders;
-  observe?: 'body';
+  observe?: 'response' | 'events' | 'body';
   params?: HttpParams;
-  responseType?: 'events';
+  responseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
   reportProgress?: boolean;
   withCredentials?: boolean;
 }
@@ -54,12 +54,13 @@ export class CppHttpBackend {
   }
 
   // note that an empty object as the body is required else the content-type will be stripped
-  post(
+
+  post<T extends PostRequestOptions = PostRequestOptions>(
     url: string,
     requestType?: string,
     body: FormData | any | null = {},
-    options: PostRequestOptions = {}
-  ): Observable<HttpEvent<any>> {
+    options: T = {} as T
+  ): Observable<any | HttpResponse<any> | HttpEvent<any>> {
     let headers = options.headers || new HttpHeaders();
     headers = headers.set('Accept', '*/*');
 
@@ -67,10 +68,10 @@ export class CppHttpBackend {
       headers = headers.set('Content-Type', requestType);
     }
     return this.http.post(`${this.config.baseUrl}${url}`, body, {
-      ...options,
-      headers,
       observe: 'response',
-      responseType: 'text'
+      responseType: 'text',
+      ...options,
+      headers
     });
   }
 }
