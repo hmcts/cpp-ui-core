@@ -3,6 +3,7 @@ import { CookiesPreferences } from '../cookies.service';
 import { provideCppCookieServices } from '../providers';
 import { CookiesService, COOKIES_PREFERENCES_KEY } from '../cookies.service';
 import { DynatraceService } from '../dynatrace/dynatrace.service';
+import { GtmService } from '../gtm/gtm.service';
 
 describe('CookiesModule', () => {
   let cookiesService: CookiesService;
@@ -120,6 +121,25 @@ describe('CookiesModule', () => {
       cookiesService.restart();
       expect(dtrum.start).not.toHaveBeenCalled();
       expect(dtrum.stop).toHaveBeenCalled();
+    });
+
+    it('should manage GTM alongside the real user monitoring preference', () => {
+      const gtm: GtmService = TestBed.inject(GtmService);
+      gtm.start = jest.fn();
+      gtm.stop = jest.fn();
+
+      installCookiePreferences({ realUserMonitoring: true });
+      cookiesService.start();
+      expect(gtm.start).toHaveBeenCalled();
+      expect(gtm.stop).not.toHaveBeenCalled();
+
+      gtm.start = jest.fn();
+      gtm.stop = jest.fn();
+
+      installCookiePreferences({ realUserMonitoring: false });
+      cookiesService.restart();
+      expect(gtm.start).not.toHaveBeenCalled();
+      expect(gtm.stop).toHaveBeenCalled();
     });
   });
 });

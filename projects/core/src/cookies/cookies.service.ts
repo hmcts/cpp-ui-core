@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DynatraceService } from './dynatrace/dynatrace.service';
+import { GtmService } from './gtm/gtm.service';
 
 export const COOKIES_PREFERENCES_KEY = 'cookie-preferences';
 
@@ -13,7 +14,7 @@ const defaultCookiePreferences: CookiesPreferences = {
 
 @Injectable({ providedIn: 'root' })
 export class CookiesService {
-  constructor(private dynatraceService: DynatraceService) {}
+  constructor(private dynatraceService: DynatraceService, private gtmService: GtmService) {}
 
   getCookiePreferencesExist(): boolean {
     return Boolean(this.getPersistedCookiePreferences());
@@ -72,11 +73,15 @@ export class CookiesService {
     // run any cookie-driven processes here, driven by current preferences
     if (this.getCookiePreference('realUserMonitoring')) {
       this.dynatraceService.start();
+      // GTM/GA rides on the same "additional cookies" preference as Dynatrace
+      // until a dedicated analytics category exists in the cookie banner.
+      this.gtmService.start();
     }
   }
 
   stop() {
     this.dynatraceService.stop();
+    this.gtmService.stop();
   }
 
   restart() {
