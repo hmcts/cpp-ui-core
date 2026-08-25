@@ -155,15 +155,7 @@
     </pdk-grid>
     <pdk-grid container>
       <pdk-grid one-third>
-        <pdk-form-field
-          label="Start date"
-          [errorMessages]="[
-            {
-              rule: 'required',
-              message: 'Enter a start date'
-            }
-          ]"
-        >
+        <pdk-form-field label="Start date" [errorMessages]="startDateErrorMessages">
           <div class="scheduling-filters__start-date">
             <pdk-date-input
               #sessionStartDate="ngModel"
