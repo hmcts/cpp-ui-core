@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HearingTypeAutosuggestComponent should render 1`] = `
+<cpp-hearing-type-autosuggest-test
+  disabled="false"
+  id={[Function String]}
+>
+  <cpp-hearing-type-autosuggest>
+    <pdk-autosuggest-lite />
+  </cpp-hearing-type-autosuggest>
+</cpp-hearing-type-autosuggest-test>
+`;

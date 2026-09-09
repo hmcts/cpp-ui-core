@@ -16,6 +16,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
   operationalUnitOptions={[Function Array]}
   panelOptions={[Function Array]}
   slotFilterFn={[Function Function]}
+  startDateErrorMessages={[Function Array]}
   utils={[Function Object]}
 >
   <div

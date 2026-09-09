@@ -59,6 +59,7 @@
             <pdk-select
               [(ngModel)]="selectedHearingTypeId"
               [name]="'hearingTypeId'"
+              [disabled]="hearingTypeDisabled"
               justified
               [options]="hearingTypesOptions"
               required

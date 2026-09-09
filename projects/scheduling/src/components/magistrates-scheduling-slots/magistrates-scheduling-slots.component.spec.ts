@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MagistratesSchedulingSlotsComponent } from './magistrates-scheduling-slots.component';
 import { DatePipe } from '@angular/common';
-import { RotaBusinessType } from '@cpp/reference-data';
+import { HearingType, RotaBusinessType } from '@cpp/reference-data';
+import { HearingSlotAllocation } from '../../types';
 
 describe('MagistratesSchedulingSlotsComponent', () => {
   let component: MagistratesSchedulingSlotsComponent;
@@ -35,6 +36,52 @@ describe('MagistratesSchedulingSlotsComponent', () => {
     expect(component.rotaBusinessTypesByCode).toEqual({
       TRL: businessTypes[0],
       TFL: businessTypes[1]
+    });
+  });
+
+  describe('hearingTypeDisabled', () => {
+    beforeEach(() => {
+      component.totalResults = 1;
+      component.formConfig = { formFields: ['hearingType'] };
+      component.hearingTypes = [
+        { id: '1', hearingDescription: 'Trial' }
+      ] as unknown as HearingType[];
+      component.hearingType = { id: '1', hearingDescription: 'Trial' } as HearingType;
+    });
+
+    it('should default to enabled', () => {
+      fixture.detectChanges();
+
+      const select = fixture.nativeElement.querySelector('pdk-select select');
+      expect(component.hearingTypeDisabled).toBe(false);
+      expect(select.disabled).toBe(false);
+    });
+
+    it('should disable the hearing type select when set', () => {
+      component.hearingTypeDisabled = true;
+      fixture.detectChanges();
+
+      const select = fixture.nativeElement.querySelector('pdk-select select');
+      expect(select.disabled).toBe(true);
+    });
+
+    it('should keep the preselected hearing type in the submit payload when disabled', () => {
+      component.hearingTypeDisabled = true;
+      component.allocations = [
+        {
+          hearingSlot: { courtScheduleId: '1', slotBased: true, sessionDate: '2025-04-09' },
+          hearingSlotTime: '2025-04-09T09:00:00.000Z'
+        }
+      ] as unknown as HearingSlotAllocation[];
+      jest.spyOn(component.hearingSlotAllocations, 'emit');
+
+      component.handleSubmitAllocations();
+
+      expect(component.hearingSlotAllocations.emit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          hearingType: expect.objectContaining({ id: '1' })
+        })
+      );
     });
   });
 });

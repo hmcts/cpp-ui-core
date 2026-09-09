@@ -12,7 +12,7 @@ export * from './guards/cps-business-units.guard';
 export * from './guards/cps-case-status.guard';
 export * from './guards/fixed-lists.guard';
 export * from './guards/court-centres.guard';
-export * from './guards/court-centre-units.gard';
+export * from './guards/get-all-court-centre-units.guard';
 export * from './guards/hearing-type.guard';
 export * from './guards/local-justice-areas.guard';
 export * from './guards/plea-types.guard';
