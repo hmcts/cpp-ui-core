@@ -47,6 +47,7 @@ export class MagistratesSchedulingSlotsComponent {
   @Input() currentPage = 1;
   @Input() hearingSlots: HearingSlot[] = [];
   @Input() hearingSlotMinutes?: number = 0;
+  @Input() hearingTypeDisabled = false;
   @Input() maxPages = 9;
   @Input() pageSize = 10;
   @Input() totalResults = 0;

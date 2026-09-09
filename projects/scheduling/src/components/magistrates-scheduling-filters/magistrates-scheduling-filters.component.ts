@@ -9,6 +9,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {
+  ErrorMessageConfig,
   PdkButton,
   PdkCore,
   PdkDateInput,
@@ -79,6 +80,17 @@ export class MagistratesSchedulingFiltersComponent {
     this.operationalUnitOptions = utils.getOperationalUnitOptions(organisationUnits);
   }
   @Input() rotaBusinessTypes?: RotaBusinessType[];
+  /**
+   * Validation messages for Start date. Consumers own this copy because minDate is generic,
+   * so a rule such as minDate means something different to each of them. Overriding replaces the
+   * whole list, so include the required message alongside any rule you add.
+   */
+  @Input() startDateErrorMessages: ErrorMessageConfig[] = [
+    {
+      rule: 'required',
+      message: 'Enter a start date'
+    }
+  ];
   @Input() enableMultiDay = true;
   @Output() errors = new EventEmitter<ValidationError[] | null>();
   @Output() filtersSubmit = new EventEmitter<MagistratesSchedulingFilters>();

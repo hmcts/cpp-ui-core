@@ -123,6 +123,18 @@ export const loadOrganisationUnitsError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
+export const loadAllOrganisationUnits = createAction('LOAD_ALL_COURT_CENTRES');
+
+export const loadAllOrganisationUnitsSuccess = createAction(
+  'LOAD_ALL_COURT_CENTRES_SUCCESS',
+  props<{ allOrganisationUnits: OrganisationUnit[] }>()
+);
+
+export const loadAllOrganisationUnitsError = createAction(
+  'LOAD_ALL_COURT_CENTRES_ERROR',
+  props<{ error: HttpErrorResponse }>()
+);
+
 export const loadFixedLists = createAction('LOAD_FIXED_LISTS');
 
 export const loadFixedListsSuccess = createAction(

@@ -39,6 +39,7 @@ export interface ReferenceDataState {
   judiciaryGroupTypes?: JudiciaryGroupType[] | null;
   localJusticeAreas?: LocalJusticeArea[] | null;
   organisationUnits?: OrganisationUnit[] | null;
+  allOrganisationUnits?: OrganisationUnit[] | null;
   policeForceList?: PoliceForce[] | null;
   prosecutors?: Prosecutor[] | null;
   resultDefinitions?: ResultDefinition[] | null;
@@ -270,6 +271,26 @@ export const referenceData = createReducer(
     Object.keys(state).reduce(
       (nextState, key) =>
         key !== 'organisationUnits' || state[key as keyof ReferenceDataState] !== null
+          ? { ...nextState, [key]: state[key as keyof ReferenceDataState] }
+          : nextState,
+      {}
+    )
+  ),
+
+  // All organisation units (including expired)
+
+  on(ReferenceDataActions.loadAllOrganisationUnits, (state) => ({
+    ...state,
+    allOrganisationUnits: state.allOrganisationUnits || null
+  })),
+  on(ReferenceDataActions.loadAllOrganisationUnitsSuccess, (state, { allOrganisationUnits }) => ({
+    ...state,
+    allOrganisationUnits
+  })),
+  on(ReferenceDataActions.loadAllOrganisationUnitsError, (state) =>
+    Object.keys(state).reduce(
+      (nextState, key) =>
+        key !== 'allOrganisationUnits' || state[key as keyof ReferenceDataState] !== null
           ? { ...nextState, [key]: state[key as keyof ReferenceDataState] }
           : nextState,
       {}
