@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { GtmService } from '../gtm/gtm.service';
+import { GTM_CONFIG, GtmService } from '../gtm/gtm.service';
 
 describe('GtmService', () => {
   afterEach(() => {
@@ -26,24 +26,16 @@ describe('GtmService', () => {
 
       expect(window.dataLayer).toBeUndefined();
     });
-
-    it('should inject the script once configured at runtime', () => {
-      gtmService.configure({ containerId: 'GTM-123TEST' });
-      gtmService.start();
-
-      const script = document.querySelector<HTMLScriptElement>(
-        'script[src*="googletagmanager.com"]'
-      );
-      expect(script?.src).toContain('id=GTM-123TEST');
-    });
   });
 
   describe('when a GTM container id is configured', () => {
     let gtmService: GtmService;
 
     beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [{ provide: GTM_CONFIG, useValue: { containerId: 'GTM-123TEST' } }]
+      });
       gtmService = TestBed.inject(GtmService);
-      gtmService.configure({ containerId: 'GTM-123TEST' });
     });
 
     it('should initialise the dataLayer and inject the GTM script on start', () => {

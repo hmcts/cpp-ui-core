@@ -1,19 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, inject } from '@angular/core';
 import { GtmConfig } from './gtm.interfaces';
+
+export const GTM_CONFIG = new InjectionToken<GtmConfig>('GTM_CONFIG');
 
 @Injectable({ providedIn: 'root' })
 export class GtmService {
+  private config = inject(GTM_CONFIG, { optional: true });
   private scriptInjected = false;
   private enabled = false;
-  private config: GtmConfig | null = null;
-
-  /**
-   * Sets the GTM config once a consuming app knows its container id - typically
-   * called from wherever that app's runtime config fetch resolves, before start().
-   */
-  configure(config: GtmConfig): void {
-    this.config = config;
-  }
 
   start(): void {
     if (!this.config?.containerId) {
