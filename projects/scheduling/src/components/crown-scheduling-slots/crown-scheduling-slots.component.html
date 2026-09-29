@@ -1,7 +1,7 @@
 @if (totalResults > 0) {
 <div id="findSessionsSlots">
   <form pdk-form novalidate>
-    @switch (selectionMode) { @case ('single') {
+    @if (selectionMode === 'single') {
     <pdk-radio-group
       [ngModel]="selectedSlotsModel"
       (ngModelChange)="handleAllocationChanged([$event]); selectedSlotsModel = [$event]"
@@ -13,33 +13,20 @@
         [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
         [selectedHearingSlotTimestamps]="selectedHearingSlotTimestamps"
         (selectedHearingSlotTimestamp)="handleHearingSlotTimeChanged($event)"
+        (errors)="errors.emit($event)"
       />
     </pdk-radio-group>
-    } @case ('multi') {
-    <pdk-checkbox-group
-      [(ngModel)]="selectedSlotsModel"
-      (ngModelChange)="handleAllocationChanged($event)"
-      [ngModelOptions]="{ standalone: true }"
-    >
-      <hearing-slots-table
-        [selectionMode]="selectionMode"
-        [hearingSlots]="hearingSlots"
-        [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
-        [selectedHearingSlotTimestamps]="selectedHearingSlotTimestamps"
-        (selectedHearingSlotTimestamp)="handleHearingSlotTimeChanged($event)"
-      />
-    </pdk-checkbox-group>
-    } @default {
+    } @else {
     <hearing-slots-table
       [hearingSlots]="hearingSlots"
       [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
+      (errors)="errors.emit($event)"
     />
-    } } @if (totalResults > pageSize) {
+    } @if (totalResults > pageSize) {
     <pdk-pagination
       [currentPage]="currentPage"
       [totalResults]="totalResults"
       [pageSize]="pageSize"
-      [maxPages]="maxPages"
       (pageChange)="pageChange.emit($event)"
     >
     </pdk-pagination>

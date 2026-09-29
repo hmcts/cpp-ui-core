@@ -1,74 +1,69 @@
 import {
   ChangeDetectionStrategy,
+  computed,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
+  input,
   Output,
   ViewEncapsulation
 } from '@angular/core';
 import {
-  PdkHintComponent,
-  PdkInsetTextComponent,
+  ErrorMessageConfig,
   PdkButton,
   PdkCore,
   PdkDateInput,
   PdkForm,
   PdkGrid,
+  PdkInsetTextComponent,
   PdkRadio,
   PdkTextInput,
   PdkSelectComponent,
   SelectOption,
   ValidationError
 } from '@cpp/pdk';
-import { SchedulingFilters } from '../../types/filters';
+import { MagistratesSchedulingFilters } from '../../types/filters';
+import { COURT_SESSION_SELECT_OPTIONS } from '../../types/schedulingFilterOptions';
 import {
   CppReferenceDataComponents,
   OrganisationUnit,
   RotaBusinessType
 } from '@cpp/reference-data';
 import * as utils from '../../utils';
-import { DatePipe } from '@angular/common';
-import { EstimateInput } from '../estimate-input/estimate-input';
+import { operationalUnitAllCourtsPlaceholder } from '../../utils/operationalUnit';
+import { DatePipe, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SchedulingFiltersCourtAndBookingComponent } from '../scheduling-filters-court-and-booking/scheduling-filters-court-and-booking.component';
 
-const courtSessionOptions: SelectOption<SchedulingFilters['courtSession'] | undefined>[] = [
-  { value: undefined, label: 'Any' },
-  { value: 'AM', label: 'AM' },
-  { value: 'PM', label: 'PM' },
-  { value: 'AD', label: 'All day' }
-];
-
-const panelOptions: SelectOption<SchedulingFilters['panel']>[] = [
+const panelOptions: SelectOption<MagistratesSchedulingFilters['panel']>[] = [
   { value: 'ADULT', label: 'Adult' },
   { value: 'YOUTH', label: 'Youth' }
 ];
 
 @Component({
-  selector: 'scheduling-filters',
+  selector: 'magistrates-scheduling-filters',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: `./scheduling-filters.component.html`,
-  styleUrls: ['./scheduling-filters.component.scss'],
+  templateUrl: './magistrates-scheduling-filters.component.html',
+  styleUrls: ['../scheduling-filters.layout.scss'],
   encapsulation: ViewEncapsulation.None,
   imports: [
     FormsModule,
+    DatePipe,
     PdkSelectComponent,
-    PdkInsetTextComponent,
     PdkGrid,
     PdkRadio,
     PdkButton,
     PdkCore,
+    PdkDateInput,
+    PdkInsetTextComponent,
     CppReferenceDataComponents,
-    DatePipe,
-    EstimateInput,
     PdkForm,
-    PdkHintComponent,
     PdkTextInput,
-    PdkDateInput
+    SchedulingFiltersCourtAndBookingComponent
   ]
 })
-export class SchedulingFiltersComponent implements OnChanges {
-  @Input() set defaultValues(defaultValues: SchedulingFilters) {
+export class MagistratesSchedulingFiltersComponent {
+  @Input() set defaultValues(defaultValues: MagistratesSchedulingFilters) {
     this.formModel = { ...defaultValues, isSlotBased: defaultValues?.isSlotBased ?? true };
     if (!this.initialValues) {
       this.initialValues = {
@@ -79,32 +74,48 @@ export class SchedulingFiltersComponent implements OnChanges {
         isSlotBased: true
       };
     }
+    this.applyOperationalUnitByDefault();
   }
   @Input() set organisationUnits(organisationUnits: OrganisationUnit[]) {
     this.operationalUnitOptions = utils.getOperationalUnitOptions(organisationUnits);
   }
   @Input() rotaBusinessTypes?: RotaBusinessType[];
-  @Input() minimumDate?: string;
+  /**
+   * Validation messages for Start date. Consumers own this copy because minDate is generic,
+   * so a rule such as minDate means something different to each of them. Overriding replaces the
+   * whole list, so include the required message alongside any rule you add.
+   */
+  @Input() startDateErrorMessages: ErrorMessageConfig[] = [
+    {
+      rule: 'required',
+      message: 'Enter a start date'
+    }
+  ];
   @Input() enableMultiDay = true;
   @Output() errors = new EventEmitter<ValidationError[] | null>();
-  @Output() filtersSubmit = new EventEmitter<SchedulingFilters>();
+  @Output() filtersSubmit = new EventEmitter<MagistratesSchedulingFilters>();
 
-  formModel!: SchedulingFilters;
-  initialValues!: SchedulingFilters;
+  formModel!: MagistratesSchedulingFilters;
+  initialValues!: MagistratesSchedulingFilters;
   operationalUnitOptions: SelectOption<string>[] = [];
   organisationUnitPlaceholder?: OrganisationUnit;
-  courtSessionOptions: SelectOption<SchedulingFilters['courtSession'] | undefined>[] =
-    courtSessionOptions;
-  panelOptions: SelectOption<SchedulingFilters['panel']>[] = panelOptions;
+  courtSessionOptions = COURT_SESSION_SELECT_OPTIONS;
+  panelOptions: SelectOption<MagistratesSchedulingFilters['panel']>[] = panelOptions;
   slotFilterFn = (rotaBusinessType: RotaBusinessType) => !rotaBusinessType.duration;
   durationFilterFn = (rotaBusinessType: RotaBusinessType) => rotaBusinessType.duration;
   protected readonly utils = utils;
-  constructor() {}
+  readonly minDate = input<string | undefined>(undefined);
+  readonly allowPastDates = input(false);
+  readonly effectiveMinDate = computed(
+    () =>
+      this.minDate() ??
+      (this.allowPastDates() ? undefined : formatDate(new Date(), 'yyyy-MM-dd', 'en-GB'))
+  );
 
-  ngOnChanges(): void {
-    if (this.formModel?.oucodeL2Code) {
-      this.handleOperationalUnitChanged(this.formModel.oucodeL2Code!);
-    }
+  private applyOperationalUnitByDefault(): void {
+    const ouCode = this.formModel?.oucodeL2Code;
+    if (!ouCode) return;
+    this.handleOperationalUnitChanged(ouCode);
   }
 
   handleFiltersSubmit() {
@@ -112,24 +123,27 @@ export class SchedulingFiltersComponent implements OnChanges {
     this.filtersSubmit.emit(filteredFormModel);
   }
 
-  filterFormModel(formModel: SchedulingFilters): SchedulingFilters {
-    return (Object.keys(formModel) as (keyof SchedulingFilters)[]).reduce((reducedParams, key) => {
-      if (key === 'isMultiday' || key === 'isSlotBased') {
-        return { ...reducedParams, [key]: formModel[key] };
-      }
-      if (
-        !formModel[key] ||
-        (key === 'organisationUnit' && formModel[key] === this.organisationUnitPlaceholder) ||
-        key === 'hearingType' || // Exclude hearingType as it's not part of the scheduling filters form
-        (key === 'availableDurationMins' && formModel.isSlotBased) // SJP will populate duration on a previous step instead of using duration input, as this will be disabled by enableMultiDay = false, so multi day is not allowed.
-      ) {
-        return reducedParams;
-      }
-      return {
-        ...reducedParams,
-        [key]: formModel[key]
-      };
-    }, {}) as SchedulingFilters;
+  filterFormModel(formModel: MagistratesSchedulingFilters): MagistratesSchedulingFilters {
+    return (Object.keys(formModel) as (keyof MagistratesSchedulingFilters)[]).reduce(
+      (reducedParams, key) => {
+        if (key === 'isMultiday' || key === 'isSlotBased') {
+          return { ...reducedParams, [key]: formModel[key] };
+        }
+        if (
+          !formModel[key] ||
+          (key === 'organisationUnit' && formModel[key] === this.organisationUnitPlaceholder) ||
+          key === 'hearingType' ||
+          (key === 'availableDurationMins' && formModel.isSlotBased)
+        ) {
+          return reducedParams;
+        }
+        return {
+          ...reducedParams,
+          [key]: formModel[key]
+        };
+      },
+      {}
+    ) as MagistratesSchedulingFilters;
   }
 
   filterByOperationalUnit = (organisationUnit: OrganisationUnit): boolean =>
@@ -138,21 +152,15 @@ export class SchedulingFiltersComponent implements OnChanges {
       this.formModel.oucodeL2Code === organisationUnit.oucodeL2Code);
 
   handleOperationalUnitChanged(oucodeL2Code?: string): void {
-    const orgUnitplaceholder = {
-      id: '',
-      oucodeL1Code: 'B',
-      oucodeL2Code,
-      oucodeL3Name: 'All courts',
-      oucodeL3Code: 'All courts'
-    } as OrganisationUnit;
+    const orgUnitPlaceholder = operationalUnitAllCourtsPlaceholder('B', oucodeL2Code);
 
-    this.organisationUnitPlaceholder = orgUnitplaceholder;
+    this.organisationUnitPlaceholder = orgUnitPlaceholder;
 
     if (
       !this.formModel.organisationUnit ||
       this.formModel.organisationUnit.oucodeL2Code !== oucodeL2Code
     ) {
-      this.formModel.organisationUnit = orgUnitplaceholder;
+      this.formModel.organisationUnit = orgUnitPlaceholder;
     }
 
     if (!oucodeL2Code) {
@@ -196,8 +204,9 @@ export class SchedulingFiltersComponent implements OnChanges {
 
   handleResetForm() {
     this.formModel = {
-      ...this.initialValues
+      ...this.initialValues,
+      organisationUnit: undefined
     };
-    this.handleOperationalUnitChanged(this.initialValues.organisationUnit?.oucodeL2Code);
+    this.organisationUnitPlaceholder = undefined;
   }
 }

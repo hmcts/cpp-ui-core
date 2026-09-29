@@ -6,6 +6,7 @@ import {
   PdkTable,
   PdkRadioButtonComponent,
   PdkSelectComponent,
+  PdkTagComponent,
   ValidationError
 } from '@cpp/pdk';
 import { HearingSlot } from '../../types';
@@ -26,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     DatePipe,
     DurationPipe,
     PdkSelectComponent,
+    PdkTagComponent,
     PdkRadioButtonComponent,
     PdkCheckboxComponent,
     PdkTable,

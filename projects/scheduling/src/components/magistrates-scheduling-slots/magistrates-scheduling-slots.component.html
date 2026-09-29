@@ -1,0 +1,101 @@
+@if (totalResults > 0) {
+<div id="findSessionsSlots">
+  <form pdk-form novalidate>
+    @switch (selectionMode) { @case ('single') {
+    <pdk-radio-group
+      [ngModel]="selectedSlotsModel"
+      (ngModelChange)="handleAllocationChanged([$event]); selectedSlotsModel = [$event]"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <hearing-slots-table
+        [selectionMode]="selectionMode"
+        [hearingSlots]="hearingSlots"
+        [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
+        [selectedHearingSlotTimestamps]="selectedHearingSlotTimestamps"
+        (selectedHearingSlotTimestamp)="handleHearingSlotTimeChanged($event)"
+        (errors)="errors.emit($event)"
+      />
+    </pdk-radio-group>
+    } @case ('multi') {
+    <pdk-checkbox-group
+      [(ngModel)]="selectedSlotsModel"
+      (ngModelChange)="handleAllocationChanged($event)"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <hearing-slots-table
+        [selectionMode]="selectionMode"
+        [hearingSlots]="hearingSlots"
+        [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
+        [selectedHearingSlotTimestamps]="selectedHearingSlotTimestamps"
+        (selectedHearingSlotTimestamp)="handleHearingSlotTimeChanged($event)"
+        (errors)="errors.emit($event)"
+      />
+    </pdk-checkbox-group>
+    } @default {
+    <hearing-slots-table
+      [hearingSlots]="hearingSlots"
+      [rotaBusinessTypesByCode]="rotaBusinessTypesByCode"
+      (errors)="errors.emit($event)"
+    />
+    } } @if (totalResults > pageSize) {
+    <pdk-pagination
+      [currentPage]="currentPage"
+      [totalResults]="totalResults"
+      [pageSize]="pageSize"
+      [maxPages]="maxPages"
+      (pageChange)="pageChange.emit($event)"
+    >
+    </pdk-pagination>
+    } @if (formConfig) {
+    <pdk-grid container>
+      @if (isFieldEnabled('hearingType')) {
+      <pdk-grid full pdk-padding-horizontal="0">
+        <pdk-grid one-third>
+          <pdk-form-field
+            label="Hearing type"
+            labelType="small"
+            hintText="Please select your hearing type"
+          >
+            <pdk-select
+              [(ngModel)]="selectedHearingTypeId"
+              [name]="'hearingTypeId'"
+              [disabled]="hearingTypeDisabled"
+              justified
+              [options]="hearingTypesOptions"
+              required
+            >
+            </pdk-select>
+          </pdk-form-field>
+        </pdk-grid>
+      </pdk-grid>
+      } @if (isFieldEnabled('sendNotificationToParties')) {
+      <pdk-grid one-half>
+        <pdk-form-field label="Do you want to notify to all relevant parties?" labelType="small">
+          <pdk-radio-group
+            name="sendNotificationToParties"
+            [(ngModel)]="sendNotificationToParties"
+            required
+          >
+            <pdk-radio-button [value]="true">Yes</pdk-radio-button>
+            <pdk-radio-button data-test-id="notifyFalseValue" [value]="false">No</pdk-radio-button>
+          </pdk-radio-group>
+        </pdk-form-field>
+      </pdk-grid>
+      }
+    </pdk-grid>
+    }
+    <div>
+      @if (selectionMode !== 'readonly') {
+      <button
+        pdk-button
+        data-test-id="submitSlots"
+        [disabled]="handleDisabled()"
+        (click)="handleSubmitAllocations()"
+      >
+        Save and continue
+      </button>
+      }
+    </div>
+  </form>
+</div>
+}

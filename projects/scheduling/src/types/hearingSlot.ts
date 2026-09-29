@@ -1,3 +1,5 @@
+import { Jurisdiction } from '@cpp/reference-data';
+
 enum PanelType {
   ADULT = 'ADULT',
   YOUTH = 'YOUTH'
@@ -45,6 +47,7 @@ export interface HearingSlot {
   maxDurationForAfternoon?: number;
   createdOn: string;
   updatedOn: string;
+  draft?: boolean;
 }
 
 export interface HearingSlotJudiciary {
@@ -60,6 +63,12 @@ export interface HearingSlotAllocation {
   hearingSlot: HearingSlot;
   hearingSlotTime: string;
   duration?: number;
+}
+
+export enum CrownSessionStatus {
+  DRAFT = 'DRAFT',
+  FINAL = 'FINAL',
+  ALL = 'ALL'
 }
 
 export interface SearchHearingSlotsParams {
@@ -81,4 +90,6 @@ export interface SearchHearingSlotsParams {
   hearingTypeId?: string;
   showOverbookedSlots?: boolean;
   hearingStartTime?: string;
+  status?: CrownSessionStatus;
+  jurisdiction: Jurisdiction;
 }

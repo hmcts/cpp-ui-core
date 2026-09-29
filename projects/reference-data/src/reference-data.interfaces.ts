@@ -1,6 +1,8 @@
 import { UserGroupType } from '@cpp/users-groups';
 import { JudiciaryTypePayload, RefDataJudiciaryType } from './helpers/judiciary-type.helper';
 
+export type Jurisdiction = 'MAGISTRATES' | 'CROWN';
+
 export enum BreachType {
   GENERIC_BREACH = 'GENERIC_BREACH',
   COMMISSION_OF_NEW_OFFENCE_BREACH = 'COMMISSION_OF_NEW_OFFENCE_BREACH',
@@ -197,7 +199,7 @@ export interface PleaType {
   pleaStatusCode: string;
   pleaTypeUIFlag: boolean;
   pleaValue: string;
-  jurisdiction: 'MAGISTRATES' | 'CROWN' | 'EITHER';
+  jurisdiction: Jurisdiction | 'EITHER';
 }
 
 export interface PoliceForce {
@@ -362,8 +364,6 @@ export enum RotaBusinessTypeCode {
   trial = 'TRI'
 }
 
-export type RotaBusinessTypeJurisdiction = 'MAGISTRATES' | 'CROWN';
-
 export interface RotaBusinessType {
   id: string;
   seqNum: number;
@@ -371,7 +371,7 @@ export interface RotaBusinessType {
   typeDescription: string;
   slot: boolean;
   duration: boolean;
-  jurisdiction?: RotaBusinessTypeJurisdiction;
+  jurisdiction?: Jurisdiction;
 }
 
 export interface WitnessCareUnit {

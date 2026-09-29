@@ -1,0 +1,135 @@
+<div class="scheduling-filters-wrapper">
+  <h2 pdk-typography="heading-medium">Search for a hearing slot</h2>
+  <form
+    #form="ngForm"
+    data-test-id="crownSchedulingFiltersForm"
+    pdk-form
+    novalidate
+    (errors)="errors.emit($event)"
+    (validSubmit)="handleFiltersSubmit()"
+  >
+    <scheduling-filters-court-and-booking
+      jurisdiction="CROWN"
+      [formModel]="formModel"
+      [operationalUnitOptions]="operationalUnitOptions"
+      [organisationUnitPlaceholder]="organisationUnitPlaceholder"
+      [filterByOperationalUnit]="filterByOperationalUnit"
+      [enableMultiDay]="enableMultiDay"
+      [slotFilterFn]="slotFilterFn"
+      [durationFilterFn]="durationFilterFn"
+      (operationalUnitChanged)="handleOperationalUnitChanged($event)"
+      (courtChanged)="handleCourtChanged()"
+      (bookingTypeChange)="bookingTypeChange($event)"
+      (multidayChange)="updateCourtSession($event)"
+    >
+      <div schedulingFiltersCourtroom>
+        <pdk-form-field label="Courtroom">
+          <pdk-select
+            [(ngModel)]="formModel.sessionStatusFilter"
+            (ngModelChange)="handleSessionStatusFilterChange($event)"
+            name="sessionStatusFilter"
+            justified
+            [options]="getCourtroomOptions()"
+          >
+          </pdk-select>
+        </pdk-form-field>
+      </div>
+    </scheduling-filters-court-and-booking>
+
+    <pdk-grid container>
+      <pdk-grid one-third>
+        <pdk-form-field label="Session type">
+          <pdk-radio-group
+            name="courtSession"
+            inline
+            small
+            [(ngModel)]="formModel.courtSession"
+            [options]="courtSessionOptions"
+            [hidden]="formModel.isMultiday"
+          >
+          </pdk-radio-group>
+          @if (formModel.isMultiday) {
+          <span style="margin-top: 20px; display: block"> All day </span>
+          }
+        </pdk-form-field>
+      </pdk-grid>
+    </pdk-grid>
+
+    <pdk-grid container>
+      <pdk-grid one-third>
+        <pdk-form-field
+          label="Start date"
+          [errorMessages]="[
+            {
+              rule: 'required',
+              message: 'Enter a start date'
+            }
+          ]"
+        >
+          <div class="scheduling-filters__start-date">
+            <pdk-date-input
+              #sessionStartDate="ngModel"
+              [(ngModel)]="formModel.sessionStartDate"
+              name="sessionStartDate"
+              [minDate]="effectiveMinDate()"
+              required
+              picker
+            >
+            </pdk-date-input>
+            <div class="scheduling-filters__start-date-conjunction" pdk-padding-left="2">to</div>
+          </div>
+          @if (sessionStartDate.valid && sessionStartDate.value) {
+          <pdk-inset-text pdk-margin-bottom="0" pdk-margin-top="3" role="status" required>
+            Selected day:&nbsp;
+            <span>{{ sessionStartDate.value | date : 'EEEE' }}</span>
+          </pdk-inset-text>
+          }
+        </pdk-form-field>
+      </pdk-grid>
+      <pdk-grid one-third>
+        <pdk-form-field
+          [errorMessages]="[
+            {
+              rule: 'sessionEndDate',
+              message: 'End date must be later than start date'
+            }
+          ]"
+          label="End date"
+        >
+          <pdk-date-input
+            #sessionEndDate="ngModel"
+            [(ngModel)]="formModel.sessionEndDate"
+            name="sessionEndDate"
+            [minDate]="sessionStartDate.value"
+            picker
+            data-test-id="sessionEndDate"
+          >
+          </pdk-date-input>
+
+          @if ( sessionEndDate.value && !sessionEndDate.errors?.dateExists &&
+          !sessionEndDate.errors?.dateFormat ) {
+          <pdk-inset-text pdk-margin-bottom="0" pdk-margin-top="3" role="status" required>
+            Selected day:&nbsp;
+            <span>{{ sessionEndDate.value | date : 'EEEE' }}</span>
+          </pdk-inset-text>
+          }
+        </pdk-form-field>
+      </pdk-grid>
+    </pdk-grid>
+
+    <div class="scheduling-filters__form-actions">
+      <button data-test-id="submit-filters" pdk-button pdk-margin-bottom="0" type="submit">
+        Search
+      </button>
+      <div pdk-margin-left="4">
+        <a
+          data-test-id="reset-filters"
+          href="javascript:void(0)"
+          pdk-link
+          (click)="handleResetForm()"
+          >Reset filters</a
+        >
+      </div>
+    </div>
+  </form>
+</div>

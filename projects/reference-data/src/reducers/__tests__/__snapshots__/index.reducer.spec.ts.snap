@@ -147,6 +147,34 @@ exports[`referenceDataReducer Local Justice Areas ReferenceDataActions.loadLocal
 }
 `;
 
+exports[`referenceDataReducer all court centres HearingResultsActions.loadAllOrganisationUnitsError should remove the all court centres key 1`] = `{}`;
+
+exports[`referenceDataReducer all court centres HearingResultsActions.loadAllOrganisationUnitsSuccess should add the all court centres to the state 1`] = `
+{
+  "allOrganisationUnits": [
+    {
+      "id": "*",
+    },
+  ],
+}
+`;
+
+exports[`referenceDataReducer all court centres ReferenceDataActions.loadAllOrganisationUnits should install the all court centres key 1`] = `
+{
+  "allOrganisationUnits": null,
+}
+`;
+
+exports[`referenceDataReducer all court centres ReferenceDataActions.loadAllOrganisationUnits should not overwrite any existing all court centres 1`] = `
+{
+  "allOrganisationUnits": [
+    {
+      "id": "*",
+    },
+  ],
+}
+`;
+
 exports[`referenceDataReducer application types HearingResultsActions.loadApplicationTypesError should remove the application types key 1`] = `{}`;
 
 exports[`referenceDataReducer application types HearingResultsActions.loadApplicationTypesSuccess should add the application types to the state 1`] = `

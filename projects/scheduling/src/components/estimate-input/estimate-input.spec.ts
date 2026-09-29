@@ -74,8 +74,10 @@ describe('estimate-input', () => {
       hoursInput.nativeElement.value = hours || '';
       hoursInput.nativeElement.dispatchEvent(new Event('input'));
     }
-    minutesInput.nativeElement.value = minutes || '';
-    minutesInput.nativeElement.dispatchEvent(new Event('input'));
+    if (minutesInput) {
+      minutesInput.nativeElement.value = minutes || '';
+      minutesInput.nativeElement.dispatchEvent(new Event('input'));
+    }
   };
 
   describe('when only minutes are used', () => {
@@ -287,6 +289,52 @@ describe('estimate-input', () => {
       tick();
       expect(daysInput.nativeElement.value).toEqual('5');
       expect(minutesInput.nativeElement.value).toEqual('280');
+    }));
+  });
+
+  describe('when days are enabled and minutes-disabled is set', () => {
+    @Component({
+      selector: 'estimate-days-only-input',
+      template: `
+        <form>
+          <estimate-input
+            name="estimate"
+            [ngModel]="model"
+            days-enabled
+            minutes-disabled
+            aria-describedby="identifier"
+          >
+          </estimate-input>
+        </form>
+      `,
+      standalone: false
+    })
+    class EstimateDaysOnly {
+      model!: number;
+    }
+
+    beforeEach(initTestWith(EstimateDaysOnly));
+
+    it('hides the minutes input', () => {
+      const minutesEl = fixture.debugElement.query(By.css('[name=estimateMinutes]'));
+      expect(minutesEl).toBeTruthy();
+      expect(minutesEl.nativeElement.closest('.form-group')?.hidden).toBe(true);
+    });
+
+    it('sets the model from whole days only', () => {
+      setTimeValues({ days: '2' });
+      expect(estimate.value).toEqual(720);
+    });
+
+    it('keeps total minutes accurate when the model has a remainder after whole days', fakeAsync(() => {
+      fixture.componentInstance.model = 2 * 360 + 45;
+      fixture.detectChanges();
+      tick();
+      expect(daysInput.nativeElement.value).toEqual('2');
+      const minutesEl = fixture.debugElement.query(By.css('[name=estimateMinutes]'))!;
+      expect(minutesEl.nativeElement.value).toEqual('45');
+      expect(minutesEl.nativeElement.closest('.form-group')?.hidden).toBe(true);
+      expect(estimate.value).toEqual(765);
     }));
   });
 

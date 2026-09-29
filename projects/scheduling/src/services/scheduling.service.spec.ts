@@ -37,9 +37,9 @@ describe('SchedulingService', () => {
         oucodeL2Code: undefined,
         sessionStartDate: '2020-09-16',
         sessionEndDate: '2020-09-23',
-        panel: 'YOUTH',
         courtSession: 'AM',
-        businessType: '*'
+        businessType: '*',
+        jurisdiction: 'MAGISTRATES'
       };
 
       (http.query as jest.Mock).mockReturnValue(

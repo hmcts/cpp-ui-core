@@ -71,6 +71,7 @@ export class EstimateInput
   @Input() hoursPerDay!: number;
   @Input() daysPerWeek!: number;
   @Input() minMinutesValue!: number;
+  @Input() maxMinutesValue?: number;
 
   weeksEnabled = input(null, {
     transform: (value) => coerceBooleanProperty(value),
@@ -83,6 +84,10 @@ export class EstimateInput
   hoursEnabled = input(null, {
     transform: (value) => coerceBooleanProperty(value),
     alias: 'hours-enabled'
+  });
+  minutesDisabled = input(null, {
+    transform: (value) => coerceBooleanProperty(value),
+    alias: 'minutes-disabled'
   });
 
   readonly weeksRef = viewChild<unknown, ElementRef<HTMLInputElement>>('weeksInput', {
@@ -113,8 +118,7 @@ export class EstimateInput
   get errorMessages() {
     const expected = this.minMinutesValue;
     const suffix = expected === 1 ? 'minute' : 'minutes';
-
-    return [
+    const messages: { rule: string; message: string }[] = [
       {
         rule: 'estimateFormat',
         message: `Time not recognised, use this format, for example 1 5 15`
@@ -124,12 +128,19 @@ export class EstimateInput
         message: `Estimate is too low - you must enter at least ${expected} ${suffix}`
       }
     ];
+    if (this.maxMinutesValue != null) {
+      messages.push({
+        rule: 'maxMinutesEstimate',
+        message: `Estimate must not exceed ${this.maxMinutesValue} minutes`
+      });
+    }
+    return messages;
   }
 
   @Output() blur = new EventEmitter<any>();
   @Output() focus = new EventEmitter<any>();
 
-  constructor(private injector: Injector, elementRef: ElementRef) {
+  constructor(private injector: Injector) {
     i += 1;
     this.id = `estimate-input-${i}`;
 
@@ -273,6 +284,10 @@ export class EstimateInput
     if (minMinutesEstimate) {
       return minMinutesEstimate;
     }
+    const maxMinutesEstimate = this.validateMaximumMinutes(c);
+    if (maxMinutesEstimate) {
+      return maxMinutesEstimate;
+    }
     return null;
   }
 
@@ -281,6 +296,18 @@ export class EstimateInput
       return {
         minMinutesEstimate: {
           expected: this.minMinutesValue,
+          actual: c.value
+        }
+      };
+    }
+    return null;
+  }
+
+  validateMaximumMinutes(c: FormControl): { [k: string]: any } | null {
+    if (this.maxMinutesValue != null && c.value > this.maxMinutesValue) {
+      return {
+        maxMinutesEstimate: {
+          expected: this.maxMinutesValue,
           actual: c.value
         }
       };

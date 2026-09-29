@@ -1,0 +1,124 @@
+<pdk-grid container>
+  <pdk-grid one-third>
+    <pdk-form-field
+      [label]="
+        'Operational unit' +
+        (formModel.organisationUnit && formModel.organisationUnit !== organisationUnitPlaceholder
+          ? ' (optional)'
+          : '')
+      "
+    >
+      <pdk-select
+        [(ngModel)]="formModel.oucodeL2Code"
+        [name]="'oucodeL2Code'"
+        placeholder="Choose operational unit"
+        justified
+        (ngModelChange)="operationalUnitChanged.emit($event)"
+        [options]="operationalUnitOptions"
+        [required]="!formModel.organisationUnit"
+      >
+      </pdk-select>
+    </pdk-form-field>
+  </pdk-grid>
+  <pdk-grid one-third>
+    <pdk-form-field label="Court">
+      <cpp-organisation-unit-autosuggest
+        name="organisationUnit"
+        [filterBy]="filterByOperationalUnit"
+        [(ngModel)]="formModel.organisationUnit"
+        (ngModelChange)="courtChanged.emit()"
+        [placeholder]="organisationUnitPlaceholder"
+        [required]="!formModel.oucodeL2Code"
+      >
+      </cpp-organisation-unit-autosuggest>
+    </pdk-form-field>
+  </pdk-grid>
+  <pdk-grid one-third>
+    <ng-content select="[schedulingFiltersCourtroom]" />
+  </pdk-grid>
+</pdk-grid>
+
+<pdk-grid container>
+  <pdk-grid one-third>
+    <pdk-form-field label="Booking type" labelType="small">
+      <pdk-radio-group
+        name="bookingType"
+        [ngModelOptions]="{ standalone: true }"
+        small
+        [(ngModel)]="formModel.isSlotBased"
+        (ngModelChange)="bookingTypeChange.emit($event)"
+      >
+        <pdk-radio-button [value]="true">Slot based</pdk-radio-button>
+        <pdk-hint style="display: block">For example, PSR</pdk-hint>
+        <pdk-radio-button [value]="false">Duration based</pdk-radio-button>
+        <pdk-hint style="display: block">For example, Trial</pdk-hint>
+        @if (enableMultiDay && !formModel.isSlotBased) {
+        <pdk-radio-conditional>
+          <pdk-form-field label="Search for a multi-day hearing?" labelType="small">
+            <pdk-radio-group
+              name="multiday"
+              small
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="formModel.isMultiday"
+              (ngModelChange)="multidayChange.emit($event)"
+            >
+              @switch (jurisdiction) { @case ('MAGISTRATES') {
+              <pdk-radio-button [value]="true">Yes</pdk-radio-button>
+              <pdk-radio-button [value]="false">No</pdk-radio-button>
+              } @case ('CROWN') {
+              <pdk-radio-button [value]="true">Yes</pdk-radio-button>
+              @if (formModel.isMultiday === true) {
+              <pdk-radio-conditional>
+                <pdk-form-field label="Number of days" labelType="none">
+                  <estimate-input
+                    days-enabled
+                    minutes-disabled
+                    [minMinutesValue]="720"
+                    [(ngModel)]="formModel.availableDurationMins"
+                    name="availableDurationMins"
+                    required
+                  >
+                  </estimate-input>
+                </pdk-form-field>
+              </pdk-radio-conditional>
+              }
+              <pdk-radio-button [value]="false">No</pdk-radio-button>
+              } } @if (formModel.isMultiday === false) {
+              <pdk-radio-conditional>
+                <pdk-form-field label="Hearing duration" labelType="small">
+                  <estimate-input
+                    hours-enabled
+                    [minMinutesValue]="2"
+                    [maxMinutesValue]="jurisdiction === 'CROWN' ? 360 : undefined"
+                    [(ngModel)]="formModel.availableDurationMins"
+                    name="availableDurationMins"
+                    required
+                  >
+                  </estimate-input>
+                </pdk-form-field>
+              </pdk-radio-conditional>
+              }
+            </pdk-radio-group>
+          </pdk-form-field>
+        </pdk-radio-conditional>
+        }
+      </pdk-radio-group>
+    </pdk-form-field>
+  </pdk-grid>
+  <pdk-grid one-third>
+    <pdk-form-field label="Business type (optional)">
+      <cpp-rota-business-type-select
+        [jurisdiction]="jurisdiction"
+        [(ngModel)]="formModel.businessType"
+        [name]="'businessType'"
+        [filterBy]="formModel.isSlotBased ? slotFilterFn : durationFilterFn"
+        [placeholder]="
+          formModel.isSlotBased
+            ? 'All slot based business types'
+            : 'All duration based business types'
+        "
+        justified
+      ></cpp-rota-business-type-select>
+    </pdk-form-field>
+  </pdk-grid>
+</pdk-grid>

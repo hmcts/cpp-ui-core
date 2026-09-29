@@ -1,0 +1,8 @@
+:host {
+  pdk-radio-group[name='bookingType'] pdk-radio-button {
+    margin-bottom: 0;
+    & .govuk-radios--small .govuk-radios__item .govuk-radios__label {
+      white-space: nowrap;
+    }
+  }
+}
