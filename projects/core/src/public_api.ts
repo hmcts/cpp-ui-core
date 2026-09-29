@@ -8,6 +8,8 @@ export * from './capabilities/directives';
 export * from './cookies/providers';
 export * from './cookies/cookies.service';
 export * from './cookies/dynatrace/dynatrace.service';
+export * from './cookies/gtm/gtm.service';
+export * from './cookies/gtm/gtm.interfaces';
 export * from './fake-session/providers';
 export * from './fake-session/service';
 export * from './http/dispatcher';
