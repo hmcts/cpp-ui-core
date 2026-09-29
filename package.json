@@ -1,6 +1,6 @@
 {
   "name": "cpp.ui.core",
-  "version": "19.0.6-GASPIKE",
+  "version": "19.0.8-GASPIKE",
   "repository": {
     "type": "git",
     "url": "https://github.com/hmcts/cpp-ui-core"

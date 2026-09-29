@@ -10,6 +10,7 @@ exports[`SchedulingSlotsComponent should render 1`] = `
   hearingSlotAllocations={[Function EventEmitter_]}
   hearingSlotMinutes="0"
   hearingSlots={[Function Array]}
+  hearingTypeDisabled="false"
   hearingTypesOptions={[Function Array]}
   maxPages={[Function Number]}
   pageChange={[Function EventEmitter_]}
