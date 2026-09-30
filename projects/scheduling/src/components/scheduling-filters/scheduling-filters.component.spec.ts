@@ -62,6 +62,12 @@ describe('SchedulingFiltersComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
 
+  it('should default the start date validation messages to the required message', () => {
+    expect(component.startDateErrorMessages).toEqual([
+      { rule: 'required', message: 'Enter a start date' }
+    ]);
+  });
+
   it('should emit filtersSubmit with filtered form model on submit', () => {
     jest.spyOn(component.filtersSubmit, 'emit');
     component.formModel = { ...defaultFilters, courtSession: 'AM' };

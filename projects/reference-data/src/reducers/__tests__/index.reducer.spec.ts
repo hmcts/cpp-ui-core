@@ -442,6 +442,49 @@ describe('referenceDataReducer', () => {
     });
   });
 
+  describe('all court centres', () => {
+    describe('ReferenceDataActions.loadAllOrganisationUnits', () => {
+      it('should install the all court centres key', () => {
+        const action = ReferenceDataActions.loadAllOrganisationUnits();
+        const result = fromReferenceData.referenceDataReducer(undefined, action);
+
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should not overwrite any existing all court centres', () => {
+        const action = ReferenceDataActions.loadAllOrganisationUnits();
+        const result = fromReferenceData.referenceDataReducer(
+          { allOrganisationUnits: [{ id: '*' }] as OrganisationUnit[] },
+          action
+        );
+        expect(result).toMatchSnapshot();
+      });
+    });
+
+    describe('HearingResultsActions.loadAllOrganisationUnitsSuccess', () => {
+      it('should add the all court centres to the state', () => {
+        const action = ReferenceDataActions.loadAllOrganisationUnitsSuccess({
+          allOrganisationUnits: [{ id: '*' }] as OrganisationUnit[]
+        });
+        const result = fromReferenceData.referenceDataReducer(undefined, action);
+
+        expect(result).toMatchSnapshot();
+      });
+    });
+
+    describe('HearingResultsActions.loadAllOrganisationUnitsError', () => {
+      it('should remove the all court centres key', () => {
+        const action = ReferenceDataActions.loadAllOrganisationUnitsError({ error: {} as any });
+        const result = fromReferenceData.referenceDataReducer(
+          { allOrganisationUnits: null },
+          action
+        );
+
+        expect(result).toMatchSnapshot();
+      });
+    });
+  });
+
   describe('Local Justice Areas', () => {
     describe('ReferenceDataActions.loadLocalJusticeAreas', () => {
       it('should install the localJusticeAreas', () => {
