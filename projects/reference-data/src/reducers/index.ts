@@ -56,6 +56,12 @@ export const getOrganisationUnits = (state: ReferenceDataState) =>
 export const getOrganisationUnitsFetching = (state: ReferenceDataState) =>
   state.referenceData.organisationUnits === null;
 
+export const getAllOrganisationUnits = (state: ReferenceDataState) =>
+  state.referenceData.allOrganisationUnits;
+
+export const getAllOrganisationUnitsFetching = (state: ReferenceDataState) =>
+  state.referenceData.allOrganisationUnits === null;
+
 export const getPoliceForceList = (state: ReferenceDataState) =>
   state.referenceData.policeForceList;
 
