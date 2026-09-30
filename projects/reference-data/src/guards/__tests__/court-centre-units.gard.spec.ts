@@ -6,9 +6,9 @@ import { of, throwError } from 'rxjs';
 import { ReferenceDataActions } from '../../actions/index';
 import { referenceDataReducer, ReferenceDataState } from '../../reducers/index';
 import { ReferenceDataService } from '../../services/reference-data.service';
-import { getAllCourtCentreUnitsGuard } from '../get-all-court-centre-units.guard';
+import { createCourtCentreUnitsGuard } from '../court-centre-units.gard';
 
-describe('getAllCourtCentreUnitsGuard', () => {
+describe('createCourtCentreUnitsGuard', () => {
   let store: Store<ReferenceDataState>;
 
   let fetchOrganisationUnits: jest.Mock;
@@ -62,30 +62,45 @@ describe('getAllCourtCentreUnitsGuard', () => {
     expect.assertions(1);
     const snapshot = createSnapshot();
 
-    store.dispatch(
-      ReferenceDataActions.loadAllOrganisationUnitsSuccess({ allOrganisationUnits: [] })
-    );
+    store.dispatch(ReferenceDataActions.loadOrganisationUnitsSuccess({ organisationUnits: [] }));
 
     TestBed.runInInjectionContext(() =>
-      getAllCourtCentreUnitsGuard(snapshot, {} as RouterStateSnapshot)
+      createCourtCentreUnitsGuard()(snapshot, {} as RouterStateSnapshot)
     ).subscribe((didResolve) => {
       expect(didResolve).toBe(true);
     });
   });
 
-  it('should resolve to true after fetching the organisation units when not found in the store', () => {
+  it('should resolve to true after fetching with includeExpired=false when not found in the store', () => {
     expect.assertions(3);
     const snapshot = createSnapshot();
 
     fetchOrganisationUnits.mockReturnValue(of([]));
 
     TestBed.runInInjectionContext(() =>
-      getAllCourtCentreUnitsGuard(snapshot, {} as RouterStateSnapshot)
+      createCourtCentreUnitsGuard()(snapshot, {} as RouterStateSnapshot)
+    ).subscribe((didResolve) => {
+      expect(didResolve).toBe(true);
+      expect(fetchOrganisationUnits).toHaveBeenCalledWith(false);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        ReferenceDataActions.loadOrganisationUnitsSuccess({ organisationUnits: [] })
+      );
+    });
+  });
+
+  it('should resolve to true after fetching with includeExpired=true when not found in the store', () => {
+    expect.assertions(3);
+    const snapshot = createSnapshot();
+
+    fetchOrganisationUnits.mockReturnValue(of([]));
+
+    TestBed.runInInjectionContext(() =>
+      createCourtCentreUnitsGuard(true)(snapshot, {} as RouterStateSnapshot)
     ).subscribe((didResolve) => {
       expect(didResolve).toBe(true);
       expect(fetchOrganisationUnits).toHaveBeenCalledWith(true);
       expect(store.dispatch).toHaveBeenCalledWith(
-        ReferenceDataActions.loadAllOrganisationUnitsSuccess({ allOrganisationUnits: [] })
+        ReferenceDataActions.loadOrganisationUnitsSuccess({ organisationUnits: [] })
       );
     });
   });
@@ -98,7 +113,7 @@ describe('getAllCourtCentreUnitsGuard', () => {
     fetchOrganisationUnits.mockReturnValue(throwError(error));
 
     TestBed.runInInjectionContext(() =>
-      getAllCourtCentreUnitsGuard(snapshot, {} as RouterStateSnapshot)
+      createCourtCentreUnitsGuard()(snapshot, {} as RouterStateSnapshot)
     ).subscribe((didResolve) => {
       expect(didResolve).toBe(false);
       expect(navigateByUrl).toHaveBeenCalledWith('/error-page');

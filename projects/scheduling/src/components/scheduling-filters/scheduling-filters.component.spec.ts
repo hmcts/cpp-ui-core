@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MagistratesSchedulingFiltersComponent } from './magistrates-scheduling-filters.component';
+import { SchedulingFiltersComponent } from './scheduling-filters.component';
 import { CppHttp } from '@cpp/core';
 import { OrganisationUnit } from '@cpp/reference-data';
-import { MagistratesSchedulingFilters } from '../../types';
+import { SchedulingFilters } from '../../types';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 
-describe('MagistratesSchedulingFiltersComponent', () => {
-  let component: MagistratesSchedulingFiltersComponent;
-  let fixture: ComponentFixture<MagistratesSchedulingFiltersComponent>;
+describe('SchedulingFiltersComponent', () => {
+  let component: SchedulingFiltersComponent;
+  let fixture: ComponentFixture<SchedulingFiltersComponent>;
 
-  const defaultFilters: MagistratesSchedulingFilters = {
+  const defaultFilters: SchedulingFilters = {
     organisationUnit: {
       id: 'c133d0de-c989-48b9-bd20-0431943e347e',
       oucode: 'B01DU00',
@@ -36,7 +36,7 @@ describe('MagistratesSchedulingFiltersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MagistratesSchedulingFiltersComponent],
+      imports: [SchedulingFiltersComponent],
       providers: [
         provideMockStore({ initialState: {} }),
         {
@@ -48,7 +48,7 @@ describe('MagistratesSchedulingFiltersComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MagistratesSchedulingFiltersComponent);
+    fixture = TestBed.createComponent(SchedulingFiltersComponent);
     component = fixture.componentInstance;
     component.defaultValues = defaultFilters;
     fixture.detectChanges();
@@ -60,41 +60,6 @@ describe('MagistratesSchedulingFiltersComponent', () => {
 
   it('should render', () => {
     expect(fixture).toMatchSnapshot();
-  });
-
-  describe('effectiveMinDate', () => {
-    const today = '2026-04-10';
-    const tomorrow = '2026-04-11';
-    beforeAll(() => {
-      jest.useFakeTimers().setSystemTime(new Date(today));
-    });
-
-    it('should resolve minDate to today by default', () => {
-      expect(component.effectiveMinDate()).toBe(today);
-    });
-
-    it('should resolve minDate to custom value when provided', () => {
-      fixture.componentRef.setInput('minDate', tomorrow);
-      fixture.detectChanges();
-      expect(component.effectiveMinDate()).toBe(tomorrow);
-    });
-
-    it('should not restrict minDate when allowPastDates is true and no minDate provided', () => {
-      fixture.componentRef.setInput('allowPastDates', true);
-      fixture.componentRef.setInput('minDate', undefined);
-      fixture.detectChanges();
-      expect(component.effectiveMinDate()).toBeUndefined();
-    });
-
-    afterAll(() => {
-      jest.useRealTimers();
-    });
-  });
-
-  it('should default the start date validation messages to the required message', () => {
-    expect(component.startDateErrorMessages).toEqual([
-      { rule: 'required', message: 'Enter a start date' }
-    ]);
   });
 
   it('should emit filtersSubmit with filtered form model on submit', () => {
@@ -138,15 +103,13 @@ describe('MagistratesSchedulingFiltersComponent', () => {
     expect(component.formModel.organisationUnit!.oucodeL2Code).toBe('LONDON');
   });
 
-  it('should reset form model to initial values with court cleared', () => {
+  it('should reset form model to initial values', () => {
     component.formModel.courtSession = 'PM';
     component.handleResetForm();
     const expected = {
-      ...component.initialValues,
-      organisationUnit: undefined
+      ...component.initialValues
     };
     expect(component.formModel).toEqual(expected);
-    expect(component.organisationUnitPlaceholder).toBeUndefined();
   });
 
   it('should generate operational unit options from input', () => {
@@ -155,13 +118,11 @@ describe('MagistratesSchedulingFiltersComponent', () => {
     expect(component.operationalUnitOptions.length).toBeGreaterThan(0);
   });
 
-  it('should sync operational unit when defaultValues include oucodeL2Code', () => {
+  it('should call handleOperationalUnitChanged in ngOnChanges when formModel.oucodeL2Code is set', () => {
     const spy = jest.spyOn(component, 'handleOperationalUnitChanged');
 
-    component.defaultValues = {
-      ...defaultFilters,
-      oucodeL2Code: 'ABC'
-    };
+    component.formModel = { oucodeL2Code: 'ABC' } as SchedulingFilters;
+    component.ngOnChanges();
 
     expect(spy).toHaveBeenCalledWith('ABC');
   });

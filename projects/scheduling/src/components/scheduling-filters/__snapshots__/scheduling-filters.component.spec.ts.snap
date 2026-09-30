@@ -1,22 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
-<magistrates-scheduling-filters
-  allowPastDates={[Function Function]}
+exports[`SchedulingFiltersComponent should render 1`] = `
+<scheduling-filters
   courtSessionOptions={[Function Array]}
   durationFilterFn={[Function Function]}
-  effectiveMinDate={[Function Function]}
   enableMultiDay={[Function Boolean]}
   errors={[Function EventEmitter_]}
   filterByOperationalUnit={[Function Function]}
   filtersSubmit={[Function EventEmitter_]}
   formModel={[Function Object]}
   initialValues={[Function Object]}
-  minDate={[Function Function]}
   operationalUnitOptions={[Function Array]}
   panelOptions={[Function Array]}
   slotFilterFn={[Function Function]}
-  startDateErrorMessages={[Function Array]}
   utils={[Function Object]}
 >
   <div
@@ -34,291 +30,283 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
       novalidate=""
       pdk-form=""
     >
-      <scheduling-filters-court-and-booking
-        jurisdiction="MAGISTRATES"
+      <pdk-grid
+        class="govuk-grid-row"
+        container=""
       >
         <pdk-grid
-          class="govuk-grid-row"
-          container=""
+          class="govuk-grid-column-one-third"
+          one-third=""
         >
-          <pdk-grid
-            class="govuk-grid-column-one-third"
-            one-third=""
-          >
-            <pdk-form-field>
-              <pdk-form-group
-                class="pdk-form-group"
+          <pdk-form-field>
+            <pdk-form-group
+              class="pdk-form-group"
+            >
+              <label
+                class="govuk-label"
+                for="pdk-select-30"
               >
-                <label
-                  class="govuk-label"
-                  for="pdk-select-40"
+                 Operational unit (optional) 
+              </label>
+              <pdk-select
+                class="ng-untouched ng-pristine ng-valid"
+                justified=""
+                placeholder="Choose operational unit"
+              >
+                <select
+                  class="govuk-select pdk-select--justified"
+                  id="pdk-select-30"
+                  name="oucodeL2Code"
                 >
-                   Operational unit (optional) 
-                </label>
-                <pdk-select
+                  <option
+                    value=""
+                  >
+                    Choose operational unit
+                  </option>
+                </select>
+              </pdk-select>
+            </pdk-form-group>
+          </pdk-form-field>
+        </pdk-grid>
+        <pdk-grid
+          class="govuk-grid-column-one-third"
+          one-third=""
+        >
+          <pdk-form-field
+            label="Court"
+          >
+            <pdk-form-group
+              class="pdk-form-group"
+            >
+              <label
+                class="govuk-label"
+                for="pdk-form-control-31"
+              >
+                 Court 
+              </label>
+              <cpp-organisation-unit-autosuggest
+                class="ng-untouched ng-pristine ng-valid"
+                name="organisationUnit"
+                required=""
+              >
+                <pdk-autosuggest-lite>
+                  <pdk-autosuggest
+                    highlightcolor="blue"
+                  >
+                    <pdk-interaction-container>
+                      <div>
+                        <div
+                          class="pdk-autosuggest"
+                        >
+                          <input
+                            aria-autocomplete="list"
+                            aria-controls="pdk-autosuggest__suggestions-container-48-listbox"
+                            aria-describedby="pdk-autosuggest__instructions-49"
+                            aria-expanded="false"
+                            autocomplete="off"
+                            class="pdk-autosuggest__input ng-untouched ng-pristine ng-valid govuk-input"
+                            id="pdk-form-control-31"
+                            role="combobox"
+                            type="text"
+                          />
+                          <span
+                            class="govuk-visually-hidden"
+                            id="pdk-autosuggest__instructions-49"
+                            pdk-visually-hidden=""
+                          >
+                             When autocomplete results are available, use the up and down arrows to review and Enter to select. Touch device users, explore options with swipe gestures. 
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="govuk-visually-hidden"
+                            pdk-visually-hidden=""
+                            role="status"
+                          >
+                          </span>
+                          <div
+                            class="pdk-autosuggest__suggestions-container"
+                            id="pdk-autosuggest__suggestions-container-48"
+                          >
+                          </div>
+                        </div>
+                      </div>
+                    </pdk-interaction-container>
+                  </pdk-autosuggest>
+                </pdk-autosuggest-lite>
+              </cpp-organisation-unit-autosuggest>
+            </pdk-form-group>
+          </pdk-form-field>
+        </pdk-grid>
+        <pdk-grid
+          class="govuk-grid-column-one-third"
+          one-third=""
+        >
+          <pdk-form-field
+            label="Courtroom"
+          >
+            <pdk-form-group
+              class="pdk-form-group"
+            >
+              <label
+                class="govuk-label"
+                for="pdk-select-33"
+              >
+                 Courtroom 
+              </label>
+              <pdk-select
+                class="ng-untouched ng-pristine ng-valid"
+                justified=""
+                placeholder="All"
+              >
+                <select
+                  class="govuk-select pdk-select--justified"
+                  id="pdk-select-33"
+                  name="courtRoomId"
+                >
+                  <option
+                    value=""
+                  >
+                    All
+                  </option>
+                </select>
+              </pdk-select>
+            </pdk-form-group>
+          </pdk-form-field>
+        </pdk-grid>
+      </pdk-grid>
+      <pdk-grid
+        class="govuk-grid-row"
+        container=""
+      >
+        <pdk-grid
+          class="govuk-grid-column-one-third"
+          one-third=""
+        >
+          <pdk-form-field
+            label="Booking type"
+            labeltype="small"
+          >
+            <pdk-form-group
+              class="pdk-form-group"
+            >
+              <fieldset
+                class="govuk-fieldset"
+                pdk-fieldset=""
+              >
+                <legend
+                  class="govuk-fieldset__legend govuk-fieldset__legend--s"
+                >
+                   Booking type 
+                </legend>
+                <pdk-radio-group
                   class="ng-untouched ng-pristine ng-valid"
-                  justified=""
-                  placeholder="Choose operational unit"
+                  name="bookingType"
+                  small=""
                 >
+                  <div
+                    class="govuk-radios govuk-radios--small"
+                  >
+                    <pdk-radio-button>
+                      <div
+                        class="govuk-radios__item"
+                      >
+                        <input
+                          class="govuk-radios__input"
+                          id="pdk-radio-36"
+                          name="pdk-radio-group-35"
+                          type="radio"
+                          value="true"
+                        />
+                        <label
+                          class="govuk-radios__label govuk-label"
+                          for="pdk-radio-36"
+                          pdk-label=""
+                        >
+                          Slot based
+                        </label>
+                      </div>
+                    </pdk-radio-button>
+                    <pdk-hint
+                      class="govuk-hint"
+                      style="display: block;"
+                    >
+                      <div>
+                        For example, PSR
+                      </div>
+                    </pdk-hint>
+                    <pdk-radio-button>
+                      <div
+                        class="govuk-radios__item"
+                      >
+                        <input
+                          class="govuk-radios__input"
+                          id="pdk-radio-37"
+                          name="pdk-radio-group-35"
+                          type="radio"
+                          value="false"
+                        />
+                        <label
+                          class="govuk-radios__label govuk-label"
+                          for="pdk-radio-37"
+                          pdk-label=""
+                        >
+                          Duration based
+                        </label>
+                      </div>
+                    </pdk-radio-button>
+                    <pdk-hint
+                      class="govuk-hint"
+                      style="display: block;"
+                    >
+                      <div>
+                        For example, Trial
+                      </div>
+                    </pdk-hint>
+                  </div>
+                </pdk-radio-group>
+              </fieldset>
+            </pdk-form-group>
+          </pdk-form-field>
+        </pdk-grid>
+        <pdk-grid
+          class="govuk-grid-column-one-third"
+          one-third=""
+        >
+          <pdk-form-field
+            label="Business type (optional)"
+          >
+            <pdk-form-group
+              class="pdk-form-group"
+            >
+              <label
+                class="govuk-label"
+                for="pdk-form-control-38"
+              >
+                 Business type (optional) 
+              </label>
+              <cpp-rota-business-type-select
+                class="ng-untouched ng-pristine ng-valid"
+                justified=""
+              >
+                <pdk-select>
                   <select
                     class="govuk-select pdk-select--justified"
-                    id="pdk-select-40"
-                    name="oucodeL2Code"
+                    id="pdk-form-control-38"
+                    name="businessType"
+                    required=""
                   >
                     <option
                       value=""
                     >
-                      Choose operational unit
+                      All slot based business types
                     </option>
                   </select>
                 </pdk-select>
-              </pdk-form-group>
-            </pdk-form-field>
-          </pdk-grid>
-          <pdk-grid
-            class="govuk-grid-column-one-third"
-            one-third=""
-          >
-            <pdk-form-field
-              label="Court"
-            >
-              <pdk-form-group
-                class="pdk-form-group"
-              >
-                <label
-                  class="govuk-label"
-                  for="pdk-form-control-41"
-                >
-                   Court 
-                </label>
-                <cpp-organisation-unit-autosuggest
-                  class="ng-untouched ng-pristine ng-invalid"
-                  name="organisationUnit"
-                  required=""
-                >
-                  <pdk-autosuggest-lite>
-                    <pdk-autosuggest
-                      highlightcolor="blue"
-                    >
-                      <pdk-interaction-container>
-                        <div>
-                          <div
-                            class="pdk-autosuggest"
-                          >
-                            <input
-                              aria-autocomplete="list"
-                              aria-controls="pdk-autosuggest__suggestions-container-48-listbox"
-                              aria-describedby="pdk-autosuggest__instructions-49"
-                              aria-expanded="false"
-                              autocomplete="off"
-                              class="pdk-autosuggest__input ng-untouched ng-pristine ng-valid govuk-input"
-                              id="pdk-form-control-41"
-                              role="combobox"
-                              type="text"
-                            />
-                            <span
-                              class="govuk-visually-hidden"
-                              id="pdk-autosuggest__instructions-49"
-                              pdk-visually-hidden=""
-                            >
-                               When autocomplete results are available, use the up and down arrows to review and Enter to select. Touch device users, explore options with swipe gestures. 
-                            </span>
-                            <span
-                              aria-live="polite"
-                              class="govuk-visually-hidden"
-                              pdk-visually-hidden=""
-                              role="status"
-                            >
-                            </span>
-                            <div
-                              class="pdk-autosuggest__suggestions-container"
-                              id="pdk-autosuggest__suggestions-container-48"
-                            >
-                            </div>
-                          </div>
-                        </div>
-                      </pdk-interaction-container>
-                    </pdk-autosuggest>
-                  </pdk-autosuggest-lite>
-                </cpp-organisation-unit-autosuggest>
-              </pdk-form-group>
-            </pdk-form-field>
-          </pdk-grid>
-          <pdk-grid
-            class="govuk-grid-column-one-third"
-            one-third=""
-          >
-            <div
-              schedulingfilterscourtroom=""
-            >
-              <pdk-form-field
-                label="Courtroom"
-              >
-                <pdk-form-group
-                  class="pdk-form-group"
-                >
-                  <label
-                    class="govuk-label"
-                    for="pdk-select-30"
-                  >
-                     Courtroom 
-                  </label>
-                  <pdk-select
-                    class="ng-untouched ng-pristine ng-valid"
-                    justified=""
-                    placeholder="All"
-                  >
-                    <select
-                      class="govuk-select pdk-select--justified"
-                      id="pdk-select-30"
-                      name="courtRoomId"
-                    >
-                      <option
-                        value=""
-                      >
-                        All
-                      </option>
-                    </select>
-                  </pdk-select>
-                </pdk-form-group>
-              </pdk-form-field>
-            </div>
-          </pdk-grid>
+              </cpp-rota-business-type-select>
+            </pdk-form-group>
+          </pdk-form-field>
         </pdk-grid>
-        <pdk-grid
-          class="govuk-grid-row"
-          container=""
-        >
-          <pdk-grid
-            class="govuk-grid-column-one-third"
-            one-third=""
-          >
-            <pdk-form-field
-              label="Booking type"
-              labeltype="small"
-            >
-              <pdk-form-group
-                class="pdk-form-group"
-              >
-                <fieldset
-                  class="govuk-fieldset"
-                  pdk-fieldset=""
-                >
-                  <legend
-                    class="govuk-fieldset__legend govuk-fieldset__legend--s"
-                  >
-                     Booking type 
-                  </legend>
-                  <pdk-radio-group
-                    class="ng-untouched ng-pristine ng-valid"
-                    name="bookingType"
-                    small=""
-                  >
-                    <div
-                      class="govuk-radios govuk-radios--small"
-                    >
-                      <pdk-radio-button>
-                        <div
-                          class="govuk-radios__item"
-                        >
-                          <input
-                            class="govuk-radios__input"
-                            id="pdk-radio-44"
-                            name="pdk-radio-group-43"
-                            type="radio"
-                            value="true"
-                          />
-                          <label
-                            class="govuk-radios__label govuk-label"
-                            for="pdk-radio-44"
-                            pdk-label=""
-                          >
-                            Slot based
-                          </label>
-                        </div>
-                      </pdk-radio-button>
-                      <pdk-hint
-                        class="govuk-hint"
-                        style="display: block;"
-                      >
-                        <div>
-                          For example, PSR
-                        </div>
-                      </pdk-hint>
-                      <pdk-radio-button>
-                        <div
-                          class="govuk-radios__item"
-                        >
-                          <input
-                            class="govuk-radios__input"
-                            id="pdk-radio-45"
-                            name="pdk-radio-group-43"
-                            type="radio"
-                            value="false"
-                          />
-                          <label
-                            class="govuk-radios__label govuk-label"
-                            for="pdk-radio-45"
-                            pdk-label=""
-                          >
-                            Duration based
-                          </label>
-                        </div>
-                      </pdk-radio-button>
-                      <pdk-hint
-                        class="govuk-hint"
-                        style="display: block;"
-                      >
-                        <div>
-                          For example, Trial
-                        </div>
-                      </pdk-hint>
-                    </div>
-                  </pdk-radio-group>
-                </fieldset>
-              </pdk-form-group>
-            </pdk-form-field>
-          </pdk-grid>
-          <pdk-grid
-            class="govuk-grid-column-one-third"
-            one-third=""
-          >
-            <pdk-form-field
-              label="Business type (optional)"
-            >
-              <pdk-form-group
-                class="pdk-form-group"
-              >
-                <label
-                  class="govuk-label"
-                  for="pdk-form-control-46"
-                >
-                   Business type (optional) 
-                </label>
-                <cpp-rota-business-type-select
-                  class="ng-untouched ng-pristine ng-valid"
-                  justified=""
-                >
-                  <pdk-select>
-                    <select
-                      class="govuk-select pdk-select--justified"
-                      id="pdk-form-control-46"
-                      name="businessType"
-                      required=""
-                    >
-                      <option
-                        value=""
-                      >
-                        All slot based business types
-                      </option>
-                    </select>
-                  </pdk-select>
-                </cpp-rota-business-type-select>
-              </pdk-form-group>
-            </pdk-form-field>
-          </pdk-grid>
-        </pdk-grid>
-      </scheduling-filters-court-and-booking>
+      </pdk-grid>
       <pdk-grid
         class="govuk-grid-row"
         container=""
@@ -359,7 +347,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-51"
-                            name="pdk-radio-group-32"
+                            name="pdk-radio-group-40"
                             type="radio"
                             value="undefined"
                           />
@@ -379,7 +367,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-52"
-                            name="pdk-radio-group-32"
+                            name="pdk-radio-group-40"
                             type="radio"
                             value="AM"
                           />
@@ -399,7 +387,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-53"
-                            name="pdk-radio-group-32"
+                            name="pdk-radio-group-40"
                             type="radio"
                             value="PM"
                           />
@@ -419,7 +407,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-54"
-                            name="pdk-radio-group-32"
+                            name="pdk-radio-group-40"
                             type="radio"
                             value="AD"
                           />
@@ -474,7 +462,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-55"
-                            name="pdk-radio-group-34"
+                            name="pdk-radio-group-42"
                             type="radio"
                             value="ADULT"
                           />
@@ -494,7 +482,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           <input
                             class="govuk-radios__input"
                             id="pdk-radio-56"
-                            name="pdk-radio-group-34"
+                            name="pdk-radio-group-42"
                             type="radio"
                             value="YOUTH"
                           />
@@ -560,7 +548,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                             >
                               <label
                                 class="govuk-date-input__label govuk-label"
-                                for="pdk-date-input-36-day"
+                                for="pdk-date-input-44-day"
                                 pdk-label=""
                               >
                                  Day 
@@ -569,7 +557,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                                 autocomplete="off"
                                 class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-2"
                                 formcontrolname="day"
-                                id="pdk-date-input-36-day"
+                                id="pdk-date-input-44-day"
                                 name="dateDay"
                                 required=""
                                 type="number"
@@ -580,7 +568,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                             >
                               <label
                                 class="govuk-date-input__label govuk-label"
-                                for="pdk-date-input-36-month"
+                                for="pdk-date-input-44-month"
                                 pdk-label=""
                               >
                                  Month 
@@ -589,7 +577,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                                 autocomplete="off"
                                 class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-2"
                                 formcontrolname="month"
-                                id="pdk-date-input-36-month"
+                                id="pdk-date-input-44-month"
                                 name="dateMonth"
                                 required=""
                                 type="number"
@@ -600,7 +588,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                             >
                               <label
                                 class="govuk-date-input__label govuk-label"
-                                for="pdk-date-input-36-year"
+                                for="pdk-date-input-44-year"
                                 pdk-label=""
                               >
                                  Year 
@@ -609,7 +597,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                                 autocomplete="off"
                                 class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-4"
                                 formcontrolname="year"
-                                id="pdk-date-input-36-year"
+                                id="pdk-date-input-44-year"
                                 name="dateYear"
                                 required=""
                                 type="number"
@@ -708,7 +696,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           >
                             <label
                               class="govuk-date-input__label govuk-label"
-                              for="pdk-date-input-38-day"
+                              for="pdk-date-input-46-day"
                               pdk-label=""
                             >
                                Day 
@@ -717,7 +705,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                               autocomplete="off"
                               class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-2"
                               formcontrolname="day"
-                              id="pdk-date-input-38-day"
+                              id="pdk-date-input-46-day"
                               name="dateDay"
                               required=""
                               type="number"
@@ -728,7 +716,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           >
                             <label
                               class="govuk-date-input__label govuk-label"
-                              for="pdk-date-input-38-month"
+                              for="pdk-date-input-46-month"
                               pdk-label=""
                             >
                                Month 
@@ -737,7 +725,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                               autocomplete="off"
                               class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-2"
                               formcontrolname="month"
-                              id="pdk-date-input-38-month"
+                              id="pdk-date-input-46-month"
                               name="dateMonth"
                               required=""
                               type="number"
@@ -748,7 +736,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                           >
                             <label
                               class="govuk-date-input__label govuk-label"
-                              for="pdk-date-input-38-year"
+                              for="pdk-date-input-46-year"
                               pdk-label=""
                             >
                                Year 
@@ -757,7 +745,7 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
                               autocomplete="off"
                               class="govuk-date-input__input ng-untouched ng-pristine ng-invalid govuk-input govuk-input--width-4"
                               formcontrolname="year"
-                              id="pdk-date-input-38-year"
+                              id="pdk-date-input-46-year"
                               name="dateYear"
                               required=""
                               type="number"
@@ -820,9 +808,8 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
           data-test-id="submit-filters"
           pdk-button=""
           pdk-margin-bottom="0"
-          type="submit"
         >
-           Search 
+          Search
         </button>
         <div
           class="govuk-!-margin-left-4"
@@ -840,5 +827,5 @@ exports[`MagistratesSchedulingFiltersComponent should render 1`] = `
       </div>
     </form>
   </div>
-</magistrates-scheduling-filters>
+</scheduling-filters>
 `;

@@ -4,6 +4,7 @@ import { CppHttp, HttpQueryOptions, mapObjectToHttpParams } from '@cpp/core';
 import { Observable, throwError, timer } from 'rxjs';
 import { map, retryWhen, switchMap, take, timeout } from 'rxjs/operators';
 import { HearingSlot, ListingNote, SearchHearingSlotsParams } from '../types';
+import { omit } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,11 @@ export class SchedulingService {
   searchHearingSlots(
     paramsValues: SearchHearingSlotsParams,
     inBackground = false
-  ): Observable<{ hearingSlots: HearingSlot[]; totalResults: number; notes: ListingNote[] }> {
+  ): Observable<{
+    hearingSlots: HearingSlot[];
+    totalResults: number;
+    notes: ListingNote[];
+  }> {
     return this.cppHttp
       .query<{ hearingSlots: HearingSlot[]; results: number; notes: ListingNote[] }>({
         url: '/listing-query-api/query/api/rest/listing/hearingSlots',
@@ -39,7 +44,7 @@ export class SchedulingService {
       );
   }
 
-  async hasHearingSlotsFor(paramsValues: SearchHearingSlotsParams): Promise<boolean> {
+  async hasHearingSlotsFor(paramsValues: SearchHearingSlotsParams) {
     const extendedParams: SearchHearingSlotsParams = {
       ...paramsValues,
       showOverbookedSlots: true
