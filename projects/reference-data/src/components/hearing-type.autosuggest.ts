@@ -24,7 +24,6 @@ import { AsyncPipe } from '@angular/common';
       [ariaDescribedBy]="ariaDescribedBy"
       [ariaLabel]="ariaLabel"
       [ariaLabelledBy]="ariaLabelledBy"
-      [disabled]="disabled"
       [hasError]="hasError"
       [highlightFirstSuggestion]="highlightFirstSuggestion"
       [highlightMatchedText]="highlightMatchedText"
@@ -56,7 +55,6 @@ export class HearingTypeAutosuggestComponent<T extends HearingType>
   @Input() ariaDescribedBy: string | null = null;
   @Input() ariaLabel: string | null = null;
   @Input() ariaLabelledBy: string | null = null;
-  @Input() disabled = false;
   @Input() fetchOptionsOnMount = false;
   @Input() hasError = false;
   @Input() highlightFirstSuggestion?: boolean;
@@ -136,10 +134,6 @@ export class HearingTypeAutosuggestComponent<T extends HearingType>
 
   writeValue(value?: T) {
     this.autosuggestLiteRef.writeValue(value);
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 
   // FormFieldControl forwarding

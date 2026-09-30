@@ -21,7 +21,7 @@ import {
   ResultDefinition,
   ReusableInfoDefinitions,
   RotaBusinessType,
-  Jurisdiction,
+  RotaBusinessTypeJurisdiction,
   TrialType,
   SelectedJudiciaryOptions,
   WitnessCareUnit,
@@ -224,7 +224,7 @@ export class ReferenceDataService {
   }
 
   fetchRotaBusinessTypes(
-    params: { jurisdiction: Jurisdiction | 'ALL' } = { jurisdiction: 'ALL' }
+    params: { jurisdiction: RotaBusinessTypeJurisdiction | 'ALL' } = { jurisdiction: 'ALL' }
   ): Observable<RotaBusinessType[]> {
     return this.cppHttp
       .query<{ rotaBusinessTypes: RotaBusinessType[] }>({

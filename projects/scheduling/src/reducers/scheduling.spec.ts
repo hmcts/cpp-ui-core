@@ -1,5 +1,5 @@
 import { SchedulingActions } from '../actions';
-import { HearingSlot, ListingNote, SearchHearingSlotsParams } from '../types';
+import { HearingSlot, SearchHearingSlotsParams, ListingNote } from '../types';
 import { scheduling } from './scheduling';
 import {
   createListingNoteSuccess,

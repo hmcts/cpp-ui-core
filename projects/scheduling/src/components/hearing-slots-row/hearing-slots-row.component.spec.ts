@@ -2,10 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HearingSlotsRowComponent } from './hearing-slots-row.component';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { HearingSlot } from '../../types';
-import {
-  mockHearingSlotAmSession,
-  mockHearingSlotDraftSession
-} from '../../mocks/hearing-slot.mocks';
 import * as utils from '../../utils';
 import { BusinessTypeDescriptionPipe } from '../../pipes/businessTypeDescription.pipe';
 import {
@@ -14,8 +10,7 @@ import {
   PdkCheckboxComponent,
   PdkTable,
   PdkForm,
-  PdkCore,
-  PdkTagComponent
+  PdkCore
 } from '@cpp/pdk';
 
 jest.mock('../../utils', () => ({
@@ -28,6 +23,19 @@ describe('HearingSlotsRowComponent', () => {
   let component: HearingSlotsRowComponent;
   let fixture: ComponentFixture<HearingSlotsRowComponent>;
 
+  const hearingSlot = {
+    courtSession: 'AM',
+    sessionDate: '2025-03-25',
+    slotStartTimes: [
+      {
+        sessionStartTime: '2025-03-25T10:00:00.000Z',
+        sessionEndTime: '2025-03-25T11:00:00.000Z',
+        count: 1
+      }
+    ],
+    allDaySplit: false
+  } as HearingSlot;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -39,15 +47,13 @@ describe('HearingSlotsRowComponent', () => {
         PdkCheckboxComponent,
         PdkTable,
         PdkForm,
-        PdkCore,
-        PdkTagComponent
+        PdkCore
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HearingSlotsRowComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('hearingSlot', mockHearingSlotAmSession);
-    fixture.componentRef.setInput('selectedHearingSlotTimestamps', {});
+    fixture.componentRef.setInput('hearingSlot', hearingSlot);
     fixture.detectChanges();
   });
 
@@ -59,15 +65,9 @@ describe('HearingSlotsRowComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
 
-  it('should render when hearing slot is draft', () => {
-    fixture.componentRef.setInput('hearingSlot', mockHearingSlotDraftSession);
-    fixture.detectChanges();
-    expect(fixture).toMatchSnapshot();
-  });
-
   it('should call getHearingSlotTimeOptions from utils', () => {
-    const result = component.getHearingSlotTimeOptions(mockHearingSlotAmSession);
-    expect(utils.getHearingSlotTimeOptions).toHaveBeenCalledWith(mockHearingSlotAmSession);
+    const result = component.getHearingSlotTimeOptions(hearingSlot);
+    expect(utils.getHearingSlotTimeOptions).toHaveBeenCalledWith(hearingSlot);
     expect(result).toEqual([{ value: '10:00', label: '10:00am to 11:00am', count: 1 }]);
   });
 

@@ -1,11 +1,11 @@
-import { HearingSlot, SearchHearingSlotsParams } from '../types';
+import { HearingSlot, SearchHearingSlotsParams } from '../types'; // adjust import if enums are elsewhere
 import { loadHearingSlotsSuccess, resetHearingSlots } from './scheduling.actions';
 
 describe('Scheduling slots actions', () => {
   it('Should create a loadHearingSlotsSuccess action', () => {
-    const params = {
+    const params: SearchHearingSlotsParams = {
       sessionStartDate: '2025-04-10'
-    } as SearchHearingSlotsParams;
+    };
 
     const hearingSlots: HearingSlot[] = [
       {

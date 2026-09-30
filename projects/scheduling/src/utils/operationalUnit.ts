@@ -19,18 +19,3 @@ export const getOperationalUnitOptions = (
 
 export const isMagistratesCourt = (organisationUnit: OrganisationUnit): boolean =>
   organisationUnit?.oucodeL1Code === 'B';
-
-export const isCrownCourt = (organisationUnit: OrganisationUnit): boolean =>
-  organisationUnit?.oucodeL1Code === 'C';
-
-export const operationalUnitAllCourtsPlaceholder = (
-  oucodeL1Code: 'B' | 'C',
-  oucodeL2Code?: string
-): OrganisationUnit =>
-  ({
-    id: '',
-    oucodeL1Code,
-    oucodeL2Code,
-    oucodeL3Name: 'All courts',
-    oucodeL3Code: 'All courts'
-  } as OrganisationUnit);

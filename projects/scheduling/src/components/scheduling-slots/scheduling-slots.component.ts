@@ -17,8 +17,7 @@ import {
   AllocationsFormConfig,
   AllocationsFormConfigField,
   HearingSlot,
-  HearingSlotAllocation,
-  SchedulingSlotAllocationSubmit
+  HearingSlotAllocation
 } from '../../types';
 import * as utils from '../../utils';
 import { HearingType, RotaBusinessType } from '@cpp/reference-data';
@@ -26,8 +25,8 @@ import { HearingSlotsTableComponent } from '../hearing-slots-table/hearing-slots
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'magistrates-scheduling-slots',
-  templateUrl: './magistrates-scheduling-slots.component.html',
+  selector: 'scheduling-slots',
+  templateUrl: './scheduling-slots.component.html',
   styles: [''],
   imports: [
     HearingSlotsTableComponent,
@@ -42,12 +41,11 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ]
 })
-export class MagistratesSchedulingSlotsComponent {
+export class SchedulingSlotsComponent {
   @Input() selectionMode: 'readonly' | 'single' | 'multi' = 'readonly';
   @Input() currentPage = 1;
   @Input() hearingSlots: HearingSlot[] = [];
   @Input() hearingSlotMinutes?: number = 0;
-  @Input() hearingTypeDisabled = false;
   @Input() maxPages = 9;
   @Input() pageSize = 10;
   @Input() totalResults = 0;
@@ -82,7 +80,11 @@ export class MagistratesSchedulingSlotsComponent {
   }
 
   @Output() errors = new EventEmitter<ValidationError[] | null>();
-  @Output() hearingSlotAllocations = new EventEmitter<SchedulingSlotAllocationSubmit>();
+  @Output() hearingSlotAllocations = new EventEmitter<{
+    hearingSlotAllocations: HearingSlotAllocation[];
+    sendNotificationToParties?: boolean | undefined;
+    hearingType?: HearingType | undefined;
+  }>();
   @Output() pageChange = new EventEmitter<number>();
 
   selectedHearingTypeId: string | null = null;
@@ -195,6 +197,7 @@ export class MagistratesSchedulingSlotsComponent {
   }
 
   private validateAllocations(allocations: HearingSlotAllocation[]): boolean {
+    // each slot must have a unique session date
     return allocations.length === new Set(allocations.map((a) => a.hearingSlot.sessionDate)).size;
   }
 }
