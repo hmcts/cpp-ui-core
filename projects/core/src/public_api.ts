@@ -15,5 +15,6 @@ export * from './http/http-backend';
 export * from './http/http-service';
 export * from './http/providers';
 export * from './http/util';
+export * from './page-title/utils';
 export * from './rxjs/repeatUntil';
 export * from './utils';
