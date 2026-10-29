@@ -12,7 +12,8 @@ import {
 
 /**
  * Owns the browser tab title. The page title comes from the router (PageTitleStrategy) and the
- * defendant names come from the app's page header, so the tab always matches what the header shows.
+ * defendant names and reference come from the app's page header, so the tab always matches what
+ * the header shows.
  */
 @Injectable({ providedIn: 'root' })
 export class PageTitleService {
@@ -23,6 +24,7 @@ export class PageTitleService {
 
   private pageTitle = '';
   private defendantNames: PageTitleName[] = [];
+  private reference = '';
 
   setPageTitle(pageTitle: string): void {
     this.pageTitle = pageTitle || '';
@@ -38,9 +40,33 @@ export class PageTitleService {
     this.setDefendantNames([]);
   }
 
+  /** The reference shown in the page header, e.g. the case URN or application reference. */
+  setReference(reference: string | null | undefined): void {
+    this.reference = reference || '';
+    this.render();
+  }
+
+  clearReference(): void {
+    this.setReference('');
+  }
+
+  /** Clears everything that came from the page header, for when the header goes away. */
+  clearHeaderDetails(): void {
+    this.defendantNames = [];
+    this.reference = '';
+    this.render();
+  }
+
   private render(): void {
     this.title.setTitle(
-      buildPageTitle(this.pageTitle, formatDefendantNamesForTitle(this.defendantNames), this.format)
+      buildPageTitle(
+        {
+          pageTitle: this.pageTitle,
+          defendantName: formatDefendantNamesForTitle(this.defendantNames),
+          reference: this.reference
+        },
+        this.format
+      )
     );
   }
 }

@@ -102,4 +102,14 @@ describe('PageTitleStrategy', () => {
       'Smith J – My hearing list – Common Platform – HMCTS'
     );
   });
+
+  it('should combine with the header reference on later navigations', async () => {
+    TestBed.inject(PageTitleService).setReference('TVL12345678');
+
+    await harness.navigateByUrl('/static');
+
+    expect(title.setTitle).toHaveBeenLastCalledWith(
+      'TVL12345678 – My hearing list – Common Platform – HMCTS'
+    );
+  });
 });

@@ -61,6 +61,58 @@ describe('PageTitleService', () => {
       expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
     });
 
+    it('should add the header reference after the defendant', () => {
+      service.setPageTitle('Case details');
+      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+      service.setReference('TVL12345678');
+
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'Smith J – TVL12345678 – Case details – Common Platform – HMCTS'
+      );
+    });
+
+    it('should keep the reference when the page title changes', () => {
+      service.setReference('TVL12345678');
+      service.setPageTitle('Case materials');
+
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'TVL12345678 – Case materials – Common Platform – HMCTS'
+      );
+    });
+
+    it('should drop only the reference when it is cleared', () => {
+      service.setPageTitle('Case details');
+      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+      service.setReference('TVL12345678');
+      service.clearReference();
+
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'Smith J – Case details – Common Platform – HMCTS'
+      );
+    });
+
+    it('should drop the names and the reference when the header details are cleared', () => {
+      service.setPageTitle('Case details');
+      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+      service.setReference('TVL12345678');
+      service.clearHeaderDetails();
+
+      expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
+    });
+
+    it.each([undefined, null, '', '  '])(
+      'should give the title without a reference when the reference is %p',
+      (reference) => {
+        service.setPageTitle('Case details');
+        service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+        service.setReference(reference);
+
+        expect(title.setTitle).toHaveBeenLastCalledWith(
+          'Smith J – Case details – Common Platform – HMCTS'
+        );
+      }
+    );
+
     it('should treat null names as no names', () => {
       service.setPageTitle('Case details');
       service.setDefendantNames(null);
@@ -80,10 +132,11 @@ describe('PageTitleService', () => {
       const service = createService({ suffix: ['Criminal Justice Service Online', 'HMCTS'] });
 
       service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+      service.setReference('TVL12345678');
       service.setPageTitle('View case');
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
-        'Smith J – View case – Criminal Justice Service Online – HMCTS'
+        'Smith J – TVL12345678 – View case – Criminal Justice Service Online – HMCTS'
       );
     });
 

@@ -5,7 +5,7 @@ import { PageTitleStrategy } from './strategy';
 
 /**
  * Sets the browser tab title on every navigation, as
- * "<defendant> – <page title> – Common Platform – HMCTS" by default.
+ * "<defendant> – <reference> – <page title> – Common Platform – HMCTS" by default.
  * This should only be provided once, when the app is bootstrapped.
  */
 export const provideCppPageTitle = (options: CppPageTitleOptions = {}): EnvironmentProviders => {

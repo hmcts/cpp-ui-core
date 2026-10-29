@@ -34,11 +34,19 @@ export const formatNameForTitle = (name?: PageTitleName | null): string => {
 export const formatDefendantNamesForTitle = (names: PageTitleName[] | null = []): string =>
   formatNameForTitle((names || [])[0]);
 
-// "<defendantName> – <pageTitle> – Common Platform – HMCTS", leaving out any part that is empty.
-// Route titles are used as they are, apart from complete titles, which get no suffix.
+export interface PageTitleParts {
+  /** The page's own title, from the route. */
+  pageTitle?: string;
+  /** The lead defendant, already formatted, e.g. "Smith J". */
+  defendantName?: string;
+  /** The reference shown in the page header, e.g. the case URN. */
+  reference?: string;
+}
+
+// "<defendantName> – <reference> – <pageTitle> – Common Platform – HMCTS", leaving out any part
+// that is empty. Route titles are used as they are, apart from complete titles, which get no suffix.
 export const buildPageTitle = (
-  pageTitle: string,
-  defendantName = '',
+  { pageTitle = '', defendantName = '', reference = '' }: PageTitleParts,
   format: PageTitleFormat = {}
 ): string => {
   const {
@@ -49,7 +57,9 @@ export const buildPageTitle = (
   const title = (pageTitle || '').trim();
   const isComplete = completeTitles.includes(title);
 
-  return [defendantName, title, ...(isComplete ? [] : suffix)].filter(Boolean).join(separator);
+  return [defendantName, (reference || '').trim(), title, ...(isComplete ? [] : suffix)]
+    .filter(Boolean)
+    .join(separator);
 };
 
 // The titles declared on a set of routes and their children, e.g. @cpp/application's ERROR_PAGES_ROUTES
