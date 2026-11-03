@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { CPP_PAGE_TITLE_OPTIONS, CppPageTitleOptions } from '../options';
 import { PageTitleService } from '../service';
+import { TitleCaseReference } from '../title-case-reference';
 
 describe('PageTitleService', () => {
   let title: jest.Mocked<Title>;
@@ -32,120 +33,111 @@ describe('PageTitleService', () => {
       expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
     });
 
-    it('should prefix the page title with the lead defendant once names are set', () => {
-      service.setPageTitle('Case details');
-      service.setDefendantNames([
-        { firstName: 'John', lastName: 'Smith' },
-        { firstName: 'Jane', lastName: 'Doe' }
-      ]);
+    it('should use the route title exactly as it is given', () => {
+      service.setPageTitle('Case details | Common Platform');
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
-        'Smith J – Case details – Common Platform – HMCTS'
+        'Case details | Common Platform – Common Platform – HMCTS'
       );
     });
 
-    it('should keep the defendant prefix when the page title changes', () => {
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.setPageTitle('Case materials');
+    it('should just be the suffix when there is nothing else', () => {
+      service.setPageTitle('');
+
+      expect(title.setTitle).toHaveBeenLastCalledWith('Common Platform – HMCTS');
+    });
+
+    it('should put strings and objects before the page title, in the order given', () => {
+      service.setPageTitle('Case details');
+      service.setInformation('Foo', { toString: () => 'Bar' });
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
-        'Smith J – Case materials – Common Platform – HMCTS'
+        'Foo – Bar – Case details – Common Platform – HMCTS'
       );
     });
 
-    it('should drop the prefix when the defendant names are cleared', () => {
+    it('should use a TitleCaseReference', () => {
       service.setPageTitle('Case details');
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.clearDefendantNames();
-
-      expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
-    });
-
-    it('should add the header reference after the defendant', () => {
-      service.setPageTitle('Case details');
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.setReference('TVL12345678');
+      service.setInformation(
+        new TitleCaseReference({
+          names: [{ firstName: 'John', lastName: 'Smith' }],
+          caseReference: 'TVL12345678'
+        })
+      );
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
         'Smith J – TVL12345678 – Case details – Common Platform – HMCTS'
       );
     });
 
-    it('should keep the reference when the page title changes', () => {
-      service.setReference('TVL12345678');
+    it('should keep the information when the page title changes', () => {
+      service.setInformation('Foo');
       service.setPageTitle('Case materials');
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
-        'TVL12345678 – Case materials – Common Platform – HMCTS'
+        'Foo – Case materials – Common Platform – HMCTS'
       );
     });
 
-    it('should drop only the reference when it is cleared', () => {
+    it('should replace the information it had', () => {
       service.setPageTitle('Case details');
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.setReference('TVL12345678');
-      service.clearReference();
+      service.setInformation('Foo');
+      service.setInformation('Bar');
 
       expect(title.setTitle).toHaveBeenLastCalledWith(
-        'Smith J – Case details – Common Platform – HMCTS'
+        'Bar – Case details – Common Platform – HMCTS'
       );
     });
 
-    it('should drop the names and the reference when the header details are cleared', () => {
+    it('should drop the information when it is cleared', () => {
       service.setPageTitle('Case details');
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.setReference('TVL12345678');
-      service.clearHeaderDetails();
+      service.setInformation('Foo');
+      service.clearInformation();
 
       expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
     });
 
-    it.each([undefined, null, '', '  '])(
-      'should give the title without a reference when the reference is %p',
-      (reference) => {
+    it.each([null, undefined, '', '  ', new TitleCaseReference()])(
+      'should leave out empty information: %p',
+      (information) => {
         service.setPageTitle('Case details');
-        service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-        service.setReference(reference);
+        service.setInformation(information);
 
-        expect(title.setTitle).toHaveBeenLastCalledWith(
-          'Smith J – Case details – Common Platform – HMCTS'
-        );
+        expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
       }
     );
 
-    it('should treat null names as no names', () => {
-      service.setPageTitle('Case details');
-      service.setDefendantNames(null);
+    it('should add the suffix to every title when it has no options', () => {
+      service.setPageTitle('Signed out | Common platform');
 
-      expect(title.setTitle).toHaveBeenLastCalledWith('Case details – Common Platform – HMCTS');
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'Signed out | Common platform – Common Platform – HMCTS'
+      );
     });
 
-    it('should not add a suffix to the @cpp/application titles', () => {
-      service.setPageTitle('Technical error | Common platform');
+    it('should give the title it wrote', () => {
+      service.setPageTitle('Case details');
 
-      expect(title.setTitle).toHaveBeenLastCalledWith('Technical error | Common platform');
+      expect(service.getFormattedTitle()).toBe('Case details – Common Platform – HMCTS');
     });
   });
 
   describe('with options', () => {
     it('should use the suffix from the options', () => {
-      const service = createService({ suffix: ['Criminal Justice Service Online', 'HMCTS'] });
+      const service = createService({ suffix: 'My Shop', completeTitleRoutes: [] });
 
-      service.setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
-      service.setReference('TVL12345678');
+      service.setInformation('Foo');
       service.setPageTitle('View case');
 
-      expect(title.setTitle).toHaveBeenLastCalledWith(
-        'Smith J – TVL12345678 – View case – Criminal Justice Service Online – HMCTS'
-      );
+      expect(title.setTitle).toHaveBeenLastCalledWith('Foo – View case – My Shop');
     });
 
-    it('should use the separator from the options', () => {
-      const service = createService({ separator: ' | ' });
+    it('should add no suffix when the suffix is empty', () => {
+      const service = createService({ suffix: '', completeTitleRoutes: [] });
 
       service.setPageTitle('Case details');
 
-      expect(title.setTitle).toHaveBeenLastCalledWith('Case details | Common Platform | HMCTS');
+      expect(title.setTitle).toHaveBeenLastCalledWith('Case details');
     });
 
     it('should not add a suffix to the titles of the complete title routes', () => {
@@ -160,14 +152,54 @@ describe('PageTitleService', () => {
       expect(title.setTitle).toHaveBeenLastCalledWith('Renamed error | Common platform');
     });
 
-    it('should still recognise the @cpp/application titles alongside the routes', () => {
+    it('should only treat exact matches as complete titles', () => {
       const service = createService({
-        completeTitleRoutes: [{ path: 'other', data: { title: 'Other | Common platform' } }]
+        completeTitleRoutes: [
+          { path: 'signed-out', data: { title: 'Signed out | Common platform' } }
+        ]
       });
+
+      service.setPageTitle('Other page | Common platform');
+
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'Other page | Common platform – Common Platform – HMCTS'
+      );
+    });
+
+    it('should add the suffix to every title when the complete title routes are empty', () => {
+      const service = createService({ completeTitleRoutes: [] });
 
       service.setPageTitle('Signed out | Common platform');
 
-      expect(title.setTitle).toHaveBeenLastCalledWith('Signed out | Common platform');
+      expect(title.setTitle).toHaveBeenLastCalledWith(
+        'Signed out | Common platform – Common Platform – HMCTS'
+      );
     });
+  });
+
+  describe('joinParts', () => {
+    it('should separate the parts with an en dash', () => {
+      expect(PageTitleService.DELIMITER).toBe(' – ');
+      expect(PageTitleService.joinParts(['Smith J', 'Case details'])).toBe(
+        'Smith J – Case details'
+      );
+    });
+
+    it('should use the toString of an object', () => {
+      expect(
+        PageTitleService.joinParts([{ toString: () => 'From an object' }, 'Case details'])
+      ).toBe('From an object – Case details');
+    });
+
+    it('should leave out empty parts and trim the rest', () => {
+      expect(PageTitleService.joinParts([null, '', '  ', undefined, ' Case details '])).toBe(
+        'Case details'
+      );
+      expect(PageTitleService.joinParts([])).toBe('');
+    });
+  });
+
+  it('should have Common Platform – HMCTS as the default suffix', () => {
+    expect(PageTitleService.DEFAULT_SUFFIX).toBe('Common Platform – HMCTS');
   });
 });

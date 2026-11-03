@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { provideRouter, Routes, TitleStrategy, withRouterConfig } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { CPP_PAGE_TITLE_OPTIONS } from '../options';
 import { PageTitleService } from '../service';
 import { PageTitleStrategy } from '../strategy';
 
@@ -28,6 +29,7 @@ describe('PageTitleStrategy', () => {
       providers: [
         { provide: Title, useValue: title },
         { provide: TitleStrategy, useClass: PageTitleStrategy },
+        { provide: CPP_PAGE_TITLE_OPTIONS, useValue: { completeTitleRoutes: ERROR_ROUTES } },
         provideRouter(
           [
             { path: 'static', component: DummyComponent, data: { title: 'My hearing list' } },
@@ -87,29 +89,19 @@ describe('PageTitleStrategy', () => {
     expect(title.setTitle).toHaveBeenLastCalledWith('Common Platform – HMCTS');
   });
 
-  it('should leave an @cpp/application title as it is', async () => {
+  it('should leave the title of a complete title route as it is', async () => {
     await harness.navigateByUrl('/technical-error');
 
     expect(title.setTitle).toHaveBeenLastCalledWith('Technical error | Common platform');
   });
 
-  it('should combine with the header names on later navigations', async () => {
-    TestBed.inject(PageTitleService).setDefendantNames([{ firstName: 'John', lastName: 'Smith' }]);
+  it('should combine with the information on later navigations', async () => {
+    TestBed.inject(PageTitleService).setInformation('Foo');
 
     await harness.navigateByUrl('/static');
 
     expect(title.setTitle).toHaveBeenLastCalledWith(
-      'Smith J – My hearing list – Common Platform – HMCTS'
-    );
-  });
-
-  it('should combine with the header reference on later navigations', async () => {
-    TestBed.inject(PageTitleService).setReference('TVL12345678');
-
-    await harness.navigateByUrl('/static');
-
-    expect(title.setTitle).toHaveBeenLastCalledWith(
-      'TVL12345678 – My hearing list – Common Platform – HMCTS'
+      'Foo – My hearing list – Common Platform – HMCTS'
     );
   });
 });

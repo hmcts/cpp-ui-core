@@ -1,21 +1,9 @@
-import { Routes } from '@angular/router';
-import { CPP_APPLICATION_PAGE_TITLES } from './cpp-application-titles';
+import { Route, Routes } from '@angular/router';
 
 export interface PageTitleName {
   firstName?: string | null;
   lastName?: string | null;
 }
-
-export interface PageTitleFormat {
-  separator?: string;
-  suffix?: string[];
-  completeTitles?: string[];
-}
-
-/** En dash with spaces, as the GOV.UK Design System uses in page titles. */
-export const DEFAULT_PAGE_TITLE_SEPARATOR = ' – ';
-
-export const DEFAULT_PAGE_TITLE_SUFFIX = ['Common Platform', 'HMCTS'];
 
 // People become "Surname I". Organisations only have a firstName, so they are used as-is.
 export const formatNameForTitle = (name?: PageTitleName | null): string => {
@@ -30,39 +18,14 @@ export const formatNameForTitle = (name?: PageTitleName | null): string => {
   return firstName;
 };
 
-// Only the lead name goes in the tab, otherwise it gets too long
-export const formatDefendantNamesForTitle = (names: PageTitleName[] | null = []): string =>
-  formatNameForTitle((names || [])[0]);
-
-export interface PageTitleParts {
-  /** The page's own title, from the route. */
-  pageTitle?: string;
-  /** The lead defendant, already formatted, e.g. "Smith J". */
-  defendantName?: string;
-  /** The reference shown in the page header, e.g. the case URN. */
-  reference?: string;
-}
-
-// "<defendantName> – <reference> – <pageTitle> – Common Platform – HMCTS", leaving out any part
-// that is empty. Route titles are used as they are, apart from complete titles, which get no suffix.
-export const buildPageTitle = (
-  { pageTitle = '', defendantName = '', reference = '' }: PageTitleParts,
-  format: PageTitleFormat = {}
-): string => {
-  const {
-    separator = DEFAULT_PAGE_TITLE_SEPARATOR,
-    suffix = DEFAULT_PAGE_TITLE_SUFFIX,
-    completeTitles = CPP_APPLICATION_PAGE_TITLES
-  } = format;
-  const title = (pageTitle || '').trim();
-  const isComplete = completeTitles.includes(title);
-
-  return [defendantName, (reference || '').trim(), title, ...(isComplete ? [] : suffix)]
-    .filter(Boolean)
-    .join(separator);
-};
-
-// The titles declared on a set of routes and their children, e.g. @cpp/application's ERROR_PAGES_ROUTES
+/**
+ * The titles declared on a set of routes and their children, e.g. @cpp/application's
+ * ERROR_PAGES_ROUTES.
+ *
+ * Children from loadChildren are included when it gives the routes back straight away, as
+ * @cpp/application's SYSTEM_ANNOUNCEMENT_ROUTES does. A loadChildren that imports a module or
+ * returns a promise is skipped, as its routes aren't known until the router loads them.
+ */
 export const getRouteTitles = (routes: Routes = []): string[] => {
   const titles: string[] = [];
 
@@ -74,7 +37,13 @@ export const getRouteTitles = (routes: Routes = []): string[] => {
       titles.push(route.data['title']);
     }
     titles.push(...getRouteTitles(route.children));
+    titles.push(...getRouteTitles(getLoadedChildren(route)));
   }
 
   return titles;
+};
+
+const getLoadedChildren = (route: Route): Routes => {
+  const loaded = route.loadChildren?.();
+  return Array.isArray(loaded) ? loaded : [];
 };

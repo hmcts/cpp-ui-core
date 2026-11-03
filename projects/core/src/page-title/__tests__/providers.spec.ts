@@ -37,20 +37,25 @@ describe('provideCppPageTitle', () => {
   };
 
   it('should register the page title strategy', () => {
-    setUp([provideCppPageTitle()]);
+    setUp([provideCppPageTitle({ completeTitleRoutes: [] })]);
 
     expect(TestBed.inject(TitleStrategy)).toBeInstanceOf(PageTitleStrategy);
   });
 
   it('should provide the options', () => {
-    const options = { suffix: ['Criminal Justice Service Online', 'HMCTS'] };
+    const options = { suffix: 'Criminal Justice Service Online – HMCTS', completeTitleRoutes: [] };
     setUp([provideCppPageTitle(options)]);
 
     expect(TestBed.inject(CPP_PAGE_TITLE_OPTIONS)).toBe(options);
   });
 
   it('should set the tab title in the configured format when navigating', async () => {
-    setUp([provideCppPageTitle({ suffix: ['Criminal Justice Service Online', 'HMCTS'] })]);
+    setUp([
+      provideCppPageTitle({
+        suffix: 'Criminal Justice Service Online – HMCTS',
+        completeTitleRoutes: []
+      })
+    ]);
 
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/view-case');
@@ -67,5 +72,29 @@ describe('provideCppPageTitle', () => {
     await harness.navigateByUrl('/renamed-error');
 
     expect(title.setTitle).toHaveBeenLastCalledWith('Renamed error | Common platform');
+  });
+
+  it('should leave the titles inside a loadChildren of the complete title routes as they are', async () => {
+    const SYSTEM_ANNOUNCEMENT_ROUTES: Routes = [
+      {
+        path: 'system-announcements',
+        loadChildren: () => [
+          {
+            path: 'notifications',
+            component: DummyComponent,
+            data: { title: 'System Announcements | Common platform' }
+          }
+        ]
+      }
+    ];
+    setUp([
+      provideCppPageTitle({ completeTitleRoutes: SYSTEM_ANNOUNCEMENT_ROUTES }),
+      provideRouter(SYSTEM_ANNOUNCEMENT_ROUTES)
+    ]);
+
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/system-announcements/notifications');
+
+    expect(title.setTitle).toHaveBeenLastCalledWith('System Announcements | Common platform');
   });
 });

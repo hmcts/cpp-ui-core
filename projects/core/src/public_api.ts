@@ -19,6 +19,7 @@ export * from './page-title/options';
 export * from './page-title/providers';
 export * from './page-title/service';
 export * from './page-title/strategy';
+export * from './page-title/title-case-reference';
 export * from './page-title/utils';
 export * from './rxjs/repeatUntil';
 export * from './utils';
