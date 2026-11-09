@@ -39,6 +39,20 @@ describe('MagistratesSchedulingSlotsComponent', () => {
     });
   });
 
+  it('should sort the hearing type options alphabetically', () => {
+    component.hearingTypes = [
+      { id: 'trial-id', hearingDescription: 'Trial' },
+      { id: 'sentence-id', hearingDescription: 'Sentence' },
+      { id: 'appeal-id', hearingDescription: 'Appeal' }
+    ] as unknown as HearingType[];
+
+    expect(component.hearingTypesOptions).toEqual([
+      { value: 'appeal-id', label: 'Appeal' },
+      { value: 'sentence-id', label: 'Sentence' },
+      { value: 'trial-id', label: 'Trial' }
+    ]);
+  });
+
   describe('hearingTypeDisabled', () => {
     beforeEach(() => {
       component.totalResults = 1;

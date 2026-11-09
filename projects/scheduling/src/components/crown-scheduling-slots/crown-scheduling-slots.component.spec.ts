@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CrownSchedulingSlotsComponent } from './crown-scheduling-slots.component';
 import { DatePipe } from '@angular/common';
-import { RotaBusinessType } from '@cpp/reference-data';
+import { HearingType, RotaBusinessType } from '@cpp/reference-data';
 
 describe('CrownSchedulingSlotsComponent', () => {
   let component: CrownSchedulingSlotsComponent;
@@ -36,5 +36,19 @@ describe('CrownSchedulingSlotsComponent', () => {
       PTPH: businessTypes[0],
       SEN: businessTypes[1]
     });
+  });
+
+  it('should sort the hearing type options alphabetically', () => {
+    component.hearingTypes = [
+      { id: 'trial-id', hearingDescription: 'Trial' },
+      { id: 'sentence-id', hearingDescription: 'Sentence' },
+      { id: 'appeal-id', hearingDescription: 'Appeal' }
+    ] as unknown as HearingType[];
+
+    expect(component.hearingTypesOptions).toEqual([
+      { value: 'appeal-id', label: 'Appeal' },
+      { value: 'sentence-id', label: 'Sentence' },
+      { value: 'trial-id', label: 'Trial' }
+    ]);
   });
 });
