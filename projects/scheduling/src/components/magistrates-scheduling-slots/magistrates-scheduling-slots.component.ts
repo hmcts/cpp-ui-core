@@ -21,7 +21,7 @@ import {
   SchedulingSlotAllocationSubmit
 } from '../../types';
 import * as utils from '../../utils';
-import { HearingType, RotaBusinessType } from '@cpp/reference-data';
+import { HearingType, RotaBusinessType, sortSelectOptionAlphabetical } from '@cpp/reference-data';
 import { HearingSlotsTableComponent } from '../hearing-slots-table/hearing-slots-table.component';
 import { FormsModule } from '@angular/forms';
 
@@ -66,10 +66,12 @@ export class MagistratesSchedulingSlotsComponent {
   @Input()
   set hearingTypes(hearingTypes: HearingType[]) {
     this._hearingTypes = hearingTypes;
-    this.hearingTypesOptions = hearingTypes.map((hearingType) => ({
-      value: hearingType.id,
-      label: hearingType.hearingDescription
-    }));
+    this.hearingTypesOptions = hearingTypes
+      .map((hearingType) => ({
+        value: hearingType.id,
+        label: hearingType.hearingDescription
+      }))
+      .sort(sortSelectOptionAlphabetical);
   }
 
   get hearingTypes(): HearingType[] {
