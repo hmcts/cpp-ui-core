@@ -103,6 +103,13 @@ export const DEFENCE_USER_III: User = {
   email: 'mark.brown@brownsolicitors.co.uk'
 };
 
+export const FRAUD_INVESTIGATOR: User = {
+  userId: '5a8bcc86-0280-4489-80ab-55bc724a85ad',
+  firstName: 'CrimePlatformAudit',
+  lastName: 'User',
+  email: 'crimeplatformaudit@test.cps.gov.uk'
+};
+
 export const JUDGE: User = {
   userId: 'e54c087a-ff26-5099-ad2b-040a0182cd22',
   firstName: 'Richard',
