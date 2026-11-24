@@ -27,7 +27,8 @@ export type UserGroupType =
   | 'CPPI Consumers'
   | 'Performance Users'
   | 'CPS'
-  | 'Defence Lawyers';
+  | 'Defence Lawyers'
+  | 'Auditors';
 
 interface Permission {
   description: string;
