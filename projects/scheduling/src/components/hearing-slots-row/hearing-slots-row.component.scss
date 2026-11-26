@@ -26,6 +26,12 @@ td > table td {
   width: 210px;
 }
 
+.session-date-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 :host ::ng-deep label.govuk-label.govuk-checkboxes__label,
 :host ::ng-deep label.govuk-radios__label.govuk-label {
   display: contents;

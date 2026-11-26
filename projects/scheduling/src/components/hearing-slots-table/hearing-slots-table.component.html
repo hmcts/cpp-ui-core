@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody pdk-table-body>
-    @for (hearingSlot of hearingSlots; track hearingSlot.courtScheduleId) {
+    @for (hearingSlot of hearingSlots; track trackByCourtScheduleId(hearingSlot)) {
     <tr
       hearing-slots-row
       pdk-table-row

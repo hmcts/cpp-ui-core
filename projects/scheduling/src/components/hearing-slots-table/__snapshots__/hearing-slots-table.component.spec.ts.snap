@@ -1,5 +1,195 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`HearingSlotsTableComponent should display draft hearing slots correctly 1`] = `
+<hearing-slots-table
+  errors={[Function EventEmitter_]}
+  hearingSlots={[Function Array]}
+  rotaBusinessTypesByCode={[Function Object]}
+  selectedHearingSlotTimestamp={[Function EventEmitter_]}
+  selectedHearingSlotTimestamps={[Function Object]}
+  selectionMode={[Function String]}
+>
+  <table
+    class="govuk-!-margin-bottom-3 govuk-table"
+    data-test-id="hearingSlots"
+    pdk-margin-bottom="3"
+    pdk-table=""
+  >
+    <thead
+      class="govuk-table__head"
+      pdk-table-head=""
+    >
+      <tr
+        class="govuk-table__row"
+        pdk-table-row=""
+      >
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 100px;"
+        >
+          Date
+        </th>
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 180px;"
+        >
+          Court Details
+        </th>
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 130px;"
+        >
+          Business
+        </th>
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 210px;"
+        >
+          Session
+        </th>
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 100px;"
+        >
+          Time/slots remaining
+        </th>
+        <th
+          class="govuk-table__cell"
+          pdk-table-header=""
+          scope="col"
+          style="width: 210px;"
+        >
+          Booked
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      class="govuk-table__body"
+      pdk-table-body=""
+    >
+      <tr
+        class="govuk-table__row"
+        data-test-id="hearingSlot"
+        hearing-slots-row=""
+        pdk-table-row=""
+      >
+        <td
+          class="govuk-table__cell"
+          data-test-id="sessionDate"
+          pdk-table-cell=""
+        >
+          <div
+            class="session-date-cell"
+          >
+            <span>
+              25-03-2025
+            </span>
+            <pdk-tag
+              class="draft-session-tag govuk-!-margin-top-2"
+              condensed=""
+              data-test-id="draftTag"
+              pdk-margin-top="2"
+            >
+              <div
+                class="govuk-tag govuk-tag--grey pdk-tag--condensed"
+              >
+                Draft
+              </div>
+            </pdk-tag>
+          </div>
+        </td>
+        <td
+          class="govuk-table__cell"
+          colspan="4"
+          pdk-table-cell=""
+        >
+          <table
+            class="govuk-table"
+            pdk-table=""
+          >
+            <tr
+              class="govuk-table__row"
+              pdk-table-row=""
+            >
+              <td
+                class="width-180-px govuk-!-padding-top-0 govuk-table__cell"
+                pdk-padding-top="0"
+                pdk-table-cell=""
+              >
+                <span
+                  data-test-id="courtHouseName"
+                >
+                  Luton Crown Court
+                </span>
+              </td>
+              <td
+                class="width-130-px govuk-!-padding-top-0 govuk-table__cell"
+                data-test-id="businessType"
+                pdk-padding-top="0"
+                pdk-table-cell=""
+              >
+                <abbr>
+                </abbr>
+              </td>
+              <td
+                class="width-210-px govuk-!-padding-top-0 govuk-table__cell"
+                data-test-id="courtSession"
+                pdk-padding-top="0"
+                pdk-table-cell=""
+              >
+                <span>
+                  AM
+                </span>
+              </td>
+              <td
+                class="width-100-px govuk-!-padding-top-0 govuk-table__cell"
+                data-test-id="units"
+                pdk-padding-top="0"
+                pdk-table-cell=""
+              >
+                <ol
+                  class="govuk-!-margin-bottom-0 govuk-list"
+                  pdk-list=""
+                  pdk-margin-bottom="0"
+                >
+                  <li>
+                    0
+                  </li>
+                </ol>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td
+          class="govuk-table__cell"
+          data-test-id="booked"
+          pdk-table-cell=""
+        >
+          <ol
+            class="govuk-!-margin-bottom-0 govuk-list"
+            pdk-list=""
+            pdk-margin-bottom="0"
+          >
+            <li>
+            </li>
+          </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</hearing-slots-table>
+`;
+
 exports[`HearingSlotsTableComponent should display hearing slots correctly 1`] = `
 <hearing-slots-table
   errors={[Function EventEmitter_]}
@@ -88,7 +278,13 @@ exports[`HearingSlotsTableComponent should display hearing slots correctly 1`] =
           data-test-id="sessionDate"
           pdk-table-cell=""
         >
-           25-03-2025
+          <div
+            class="session-date-cell"
+          >
+            <span>
+              25-03-2025
+            </span>
+          </div>
         </td>
         <td
           class="govuk-table__cell"
@@ -110,13 +306,6 @@ exports[`HearingSlotsTableComponent should display hearing slots correctly 1`] =
               >
                 <span
                   data-test-id="courtHouseName"
-                >
-                </span>
-                <br />
-                <span
-                  class="pdk-!-text-color-dark-grey"
-                  data-test-id="courtroomName"
-                  pdk-text-colour="dark-grey"
                 >
                 </span>
               </td>

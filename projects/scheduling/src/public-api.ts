@@ -2,25 +2,31 @@
  * Public API Surface of scheduling
  */
 
-import { SchedulingSlotsComponent } from './components/scheduling-slots/scheduling-slots.component';
-import { SchedulingFiltersComponent } from './components/scheduling-filters/scheduling-filters.component';
+import { MagistratesSchedulingFiltersComponent } from './components/magistrates-scheduling-filters/magistrates-scheduling-filters.component';
+import { MagistratesSchedulingSlotsComponent } from './components/magistrates-scheduling-slots/magistrates-scheduling-slots.component';
+import { CrownSchedulingFiltersComponent } from './components/crown-scheduling-filters/crown-scheduling-filters.component';
+import { CrownSchedulingSlotsComponent } from './components/crown-scheduling-slots/crown-scheduling-slots.component';
 import { EstimateInput } from './components/estimate-input/estimate-input';
 import { ListingNoteContainerComponent } from './components/listing-notes/listing-note.container';
+
 export const cppSchedulingComponents = [
-  SchedulingSlotsComponent,
-  SchedulingFiltersComponent,
+  MagistratesSchedulingFiltersComponent,
+  MagistratesSchedulingSlotsComponent,
+  CrownSchedulingFiltersComponent,
+  CrownSchedulingSlotsComponent,
   EstimateInput,
   ListingNoteContainerComponent
 ] as const;
 
 export {
-  SchedulingSlotsComponent,
-  SchedulingFiltersComponent,
+  MagistratesSchedulingFiltersComponent,
+  MagistratesSchedulingSlotsComponent,
+  CrownSchedulingFiltersComponent,
+  CrownSchedulingSlotsComponent,
   EstimateInput,
   ListingNoteContainerComponent
 };
 
-export * from './scheduling.module';
 export * from './types/';
 export * from './reducers/index';
 export * from './actions/scheduling.actions';
