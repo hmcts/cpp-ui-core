@@ -2,20 +2,18 @@
   display: flex;
   align-items: center;
 }
+
 .scheduling-filters__start-date {
   display: flex;
   align-items: flex-end;
 }
+
 .scheduling-filters__start-date-conjunction {
   padding-bottom: 7px;
 }
-scheduling-filters {
-  pdk-radio-group[name='bookingType'] pdk-radio-button {
-    margin-bottom: 0;
-    & .govuk-radios--small .govuk-radios__item .govuk-radios__label {
-      white-space: nowrap;
-    }
-  }
+
+magistrates-scheduling-filters,
+crown-scheduling-filters {
   pdk-radio-group[name='courtSession'] {
     & .govuk-radios--small .govuk-radios__item .govuk-radios__label {
       white-space: nowrap;

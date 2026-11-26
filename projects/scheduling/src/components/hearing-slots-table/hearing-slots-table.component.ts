@@ -26,4 +26,16 @@ export class HearingSlotsTableComponent {
   handleHearingSlotTimeChanged(selectedHearingSlotTimestamp: Record<string, string>) {
     this.selectedHearingSlotTimestamp.emit(selectedHearingSlotTimestamp);
   }
+
+  /**
+   * The radio group wraps the table from the parent, while `pdk-radio-button` instances live in
+   * nested row templates. Selecting a radio still updates the group value, but if the parent sets the
+   * group value from outside, the nested radios are not being updated because the
+   * group’s `ContentChildren` lookup cannot see into another component’s template.
+   *  As a workaround, this track returns a new unique key each
+   * time so `@for` remounts rows and the visible selection can match the model.
+   */
+  trackByCourtScheduleId(hearingSlot: HearingSlot): string {
+    return `${hearingSlot.courtScheduleId}-${(Date.now() * Math.random()).toString()}`;
+  }
 }

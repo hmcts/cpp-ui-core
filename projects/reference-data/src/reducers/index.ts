@@ -3,7 +3,7 @@ import {
   referenceData,
   ReferenceDataState as ReferenceDataFeatureState
 } from './reference-data.reducer';
-import { RotaBusinessTypeJurisdiction, RotaBusinessType } from '../reference-data.interfaces';
+import { Jurisdiction, RotaBusinessType } from '../reference-data.interfaces';
 
 export interface ReferenceDataState {
   referenceData: ReferenceDataFeatureState;
@@ -89,9 +89,9 @@ export const getRotaBusinessTypes = createSelector(getRotaBusinesTypesState, (ro
 );
 
 export const getRotaBusinessTypesByJurisdiction = (
-  jurisdiction: RotaBusinessTypeJurisdiction | 'ALL'
+  jurisdiction: Jurisdiction | 'ALL'
 ): MemoizedSelector<ReferenceDataState, RotaBusinessType[]> =>
-  defaultMemoize((jurisdiction: RotaBusinessTypeJurisdiction | 'ALL') =>
+  defaultMemoize((jurisdiction: Jurisdiction | 'ALL') =>
     createSelector(
       getRotaBusinesTypesState,
       (rotaBusinessTypes: RotaBusinessType[] | null | undefined) => {

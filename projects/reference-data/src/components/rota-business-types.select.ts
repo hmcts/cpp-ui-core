@@ -25,7 +25,7 @@ import {
   ReferenceDataState
 } from '../reducers/index';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { RotaBusinessType, RotaBusinessTypeJurisdiction } from '../reference-data.interfaces';
+import { Jurisdiction, RotaBusinessType } from '../reference-data.interfaces';
 import { sortSelectOptionAlphabetical } from '../utils/sort-select-options-Alphabetical';
 
 @Component({
@@ -74,7 +74,7 @@ export class RotaBusinessTypeSelectComponent
     this._filterBy = fn;
     this._buildOptions$.next();
   }
-  @Input() jurisdiction: RotaBusinessTypeJurisdiction | 'ALL' = 'MAGISTRATES';
+  @Input() jurisdiction: Jurisdiction | 'ALL' = 'MAGISTRATES';
   @Output() change = new EventEmitter<SelectChangeEvent>();
 
   @ViewChild(PdkSelectComponent, { static: true }) selectRef!: PdkSelectComponent;

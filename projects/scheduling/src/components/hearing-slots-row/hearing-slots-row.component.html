@@ -8,7 +8,19 @@
 }
 <!-- Session Date -->
 <td data-test-id="sessionDate" pdk-table-cell>
-  {{ hearingSlotData.sessionDate | date : 'dd-MM-yyyy' }}
+  <div class="session-date-cell">
+    <span>{{ hearingSlotData.sessionDate | date : 'dd-MM-yyyy' }}</span>
+    @if (hearingSlotData.draft) {
+    <pdk-tag
+      class="draft-session-tag"
+      condensed
+      pdk-margin-top="2"
+      [color]="'grey'"
+      data-test-id="draftTag"
+      >Draft</pdk-tag
+    >
+    }
+  </div>
 </td>
 <td pdk-table-cell colspan="4">
   <table pdk-table>
@@ -16,10 +28,12 @@
       <!-- Courthouse -->
       <td class="width-180-px" pdk-padding-top="0" pdk-table-cell>
         <span data-test-id="courtHouseName">{{ hearingSlotData.courtHouseName }}</span>
+        @if (!!hearingSlotData.courtRoomId) {
         <br />
         <span data-test-id="courtroomName" pdk-text-colour="dark-grey"
           >{{ hearingSlotData.courtRoomName }}
         </span>
+        }
       </td>
       <!-- Business Type -->
       <td class="width-130-px" pdk-padding-top="0" data-test-id="businessType" pdk-table-cell>
@@ -36,7 +50,7 @@
         <ng-container *ngTemplateOutlet="remainingUnits"></ng-container>
       </td>
     </tr>
-    @if (selectionMode !== 'readonly') {
+    @if (selectionMode !== 'readonly' && !hearingSlotData.draft) {
     <tr pdk-table-row>
       <td colspan="4">
         <listing-note-container
